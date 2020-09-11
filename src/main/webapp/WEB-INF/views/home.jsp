@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <html>
@@ -13,8 +12,9 @@
 		$("#signupbtn").on("click", function() {
 			location.href="/healthproject/signup/"
 		});
-
-		$("#signinbtn").on("click", function() {
+		
+		
+ 		$("#signinbtn").on("click", function() {
 			$.ajax({
 				url : '/healthproject/memberinfo', 
 				data : { 'id':$('#id').val(), 'password':$('#password').val()},
@@ -36,31 +36,25 @@
 						location.href="/healthproject/signout"
 					});
 				}
-			});
+			}); // $.ajax 완료 
 			//$("#signinform").hide();
 			
-		});
-	}) 
+		}); // $("#signinbtn").on("click", function() end 
+	}) // $(document).ready(function() end
 	
 </script>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
-
-<div id="signinform">
-		로그인
-		ID : <input type="text" id="id"	name="id"> 
-		PW : <input type="password" id="password" name="password">
-		<input id="signinbtn" type="button" value="로그인">
-		<input id="signupbtn" type="button" value="회원가입">
-</div>
-<%-- <div id="signinstatus">
-	<jsp:include page="signin.jsp"></jsp:include> <!-- 근데 이거 안됨.. ㅡㅡ -->
-</div> --%>
+	<h1>
+		Hello world!  
+	</h1>
+	
+	<P>  The time on the server is ${serverTime}. </P>
+	
+	<div id="signinform">
+		<jsp:include page="included_memberinfo.jsp"></jsp:include>
+	</div>
+	
 </body>
 </html>
 

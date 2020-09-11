@@ -1,7 +1,9 @@
 package com.kangnam.healthproject;
 
 import java.io.File;
+import java.io.PrintWriter;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,47 +56,101 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public String signinForm() {
+	public String signinForm(HttpSession session) {
 		System.out.println("signinForm() 호출됨");
-		return "signin";
+		
+		if(session.getAttribute("loginCheck") != null) {
+			System.out.print("(/signin) session status :");
+			System.out.println(session.getAttribute("loginid"));
+			return "included_memberinfo";
+//			return "home";
+			
+		} else 
+			return "signin";
 	}
 	
 	@RequestMapping(value = "/signin", method = RequestMethod.POST)
-	public ModelAndView signinprocess
-	(@RequestParam(value = "id", required=true) String id, 
-	 @RequestParam(value = "password", required=true) String password)
+	public ModelAndView signinprocess 
+	(HttpSession session ,
+	 @RequestParam(value = "id", required=true) String id, 
+	 @RequestParam(value = "password", required=true) String password
+	)
 	{
+		// signin <form> 에서 넘어온 name="id"의 값을 요청 
+		//String session_id = request.getParameter("id");
+		//@RequestParam(value = "id", required=true) String id
+
+		// id 저장하기 위한 session 생성 
+		//HttpSession session = request.getSession();
+		
+		// name="id"로 받아온 값을 "loginid"라는 이름에 session 설정 
+		//session.setAttribute("loginid", session_id);
+		
 		ModelAndView mv = new ModelAndView();
-		boolean flag = dao.checkidpassword(id, password);
-		if(flag) {
-			String filepath = dao.getFilePath(id);
-			System.out.printf("Controller filepath : %s\n", filepath);
+		
+		if(session.getAttribute("loginCheck") != null) {
+			System.out.print("(/signin) session status :");
+			System.out.println(session.getAttribute("loginid"));
+			mv.setViewName("included_memberinfo");
+//			mv.setViewName("home");
 			
-			mv.addObject("id", id);
-			mv.addObject("password", password);
-			mv.addObject("filepath", filepath);
-			mv.setViewName("signinresult");
 		} else {
-			mv.setViewName("redirect:/signin");
+			session.setAttribute("loginid", id);
+			session.setAttribute("loginCheck", true);
+			System.out.print("(/memberinfo) session connected, session:");
+			System.out.println(session.getAttribute("loginid"));
+		
+			boolean flag = dao.checkidpassword(id, password);		
+			if(flag) {
+				String filepath = dao.getFilePath(id);
+				System.out.printf("Controller filepath : %s\n", filepath);
+		
+				mv.addObject("id", id);
+				mv.addObject("password", password);
+				mv.addObject("filepath", filepath);
+				mv.setViewName("signinresult");
+			} else {
+				mv.setViewName("redirect:/signin");
+			}
 		}
 		return mv;
-	}
-
-	@RequestMapping(value = "/memberinfo", method = RequestMethod.POST)
+	} 
+	
+	@RequestMapping(value = "/memberinfo", method= RequestMethod.POST)
 	@ResponseBody
-	public MemberVO getMemberInfo
-	(@RequestParam(value = "id", required=true) String id, 
-	 @RequestParam(value = "password", required=true) String password)
+	public MemberVO getMemberInfo // for home.jsp ajax
+	(HttpSession session , 
+//	 @RequestParam(value = "id", required=false) String id, 
+//	 @RequestParam(value = "password", required=false) String password)
+	@RequestParam(value = "id", required=true) String id, 
+	@RequestParam(value = "password", required=true) String password)
 	{
 		MemberVO vo = null;
-		boolean flag = dao.checkidpassword(id, password);
-		if(flag) {
-			System.out.println("Controller getMemberInfo 진행중");
-			vo = dao.getMemberinfo(id);
-			vo.getName();
-			vo.getId();
-			vo.getFilepath();
+		System.out.printf("(/memberinfo) id:%s, password:%s\n",id,password);
+		
+		if(session.getAttribute("loginCheck") != null) {
+//		if(id.equals((String)session.getAttribute("loginid"))) {
+			System.out.println("member info 실행됐음!!!!!!");
+			System.out.print("(/memberinfo) session status :");
+			System.out.println(session.getAttribute("loginid"));
+
+			vo = dao.getMemberinfo((String) session.getAttribute("loginid"));
+		} else {
+			boolean flag = dao.checkidpassword(id, password);
+			if(flag) {
+				System.out.println("(/memberinfo) Controller getMemberInfo 진행중");
+			
+				session.setAttribute("loginid", id);
+				session.setAttribute("loginCheck", true);
+				System.out.print("(/memberinfo) session connected, session:");
+				System.out.println(session.getAttribute("loginid"));
+
+				vo = dao.getMemberinfo(id);
+			}
 		}
+		vo.getName();
+		vo.getId();
+		vo.getFilepath();
 		
 		if(vo == null)
 			System.out.println("vo is null!!");
@@ -104,7 +160,12 @@ public class MemberController {
 	
 	@RequestMapping("/signout")
 	public String logout(HttpSession session) {
-		session.invalidate();
+		if(session.getAttribute("loginCheck") != null) {
+			System.out.print(session.getAttribute("loginid"));
+			System.out.println(": session invalidated!");
+			session.invalidate();
+		} else
+			System.out.println("session 등록 안돼있음");
 		return "redirect:/";
 	}
 
