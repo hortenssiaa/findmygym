@@ -1,9 +1,8 @@
 package com.kangnam.healthproject;
 
 import java.io.File;
-import java.io.PrintWriter;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,22 +55,21 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public String signinForm(HttpSession session) {
+	public String signinForm (HttpSession session) {
 		System.out.println("signinForm() 호출됨");
 		
 		if(session.getAttribute("loginCheck") != null) {
 			System.out.print("(/signin) session status :");
 			System.out.println(session.getAttribute("loginid"));
-			return "included_memberinfo";
-//			return "home";
 			
+			return "included_memberinfo";
 		} else 
 			return "signin";
 	}
 	
 	@RequestMapping(value = "/signin", method = RequestMethod.POST)
 	public ModelAndView signinprocess 
-	(HttpSession session ,
+	(HttpSession session, HttpServletRequest request,
 	 @RequestParam(value = "id", required=true) String id, 
 	 @RequestParam(value = "password", required=true) String password
 	)
@@ -102,13 +100,21 @@ public class MemberController {
 		
 			boolean flag = dao.checkidpassword(id, password);		
 			if(flag) {
-				String filepath = dao.getFilePath(id);
-				System.out.printf("Controller filepath : %s\n", filepath);
-		
-				mv.addObject("id", id);
-				mv.addObject("password", password);
-				mv.addObject("filepath", filepath);
-				mv.setViewName("signinresult");
+				
+				if(request.getHeader("Referer") != null) {
+//					String referer = request.getHeader("Referer");
+//					System.out.printf("referer :%s\n",referer);
+					mv.setViewName("redirect:/writeform");
+//					mv.setViewName("redirect:"+ referer);
+				} else {				
+					String filepath = dao.getFilePath(id);
+					System.out.printf("Controller filepath : %s\n", filepath);
+			
+					mv.addObject("id", id);
+					mv.addObject("password", password);
+					mv.addObject("filepath", filepath);
+					mv.setViewName("signinresult");
+				}
 			} else {
 				mv.setViewName("redirect:/signin");
 			}
@@ -152,8 +158,9 @@ public class MemberController {
 		vo.getId();
 		vo.getFilepath();
 		
-		if(vo == null)
+		if(vo == null) {
 			System.out.println("vo is null!!");
+		}
 		
 		return vo;
 	}

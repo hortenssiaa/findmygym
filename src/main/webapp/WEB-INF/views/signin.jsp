@@ -18,21 +18,6 @@
 <body>
 	
 	<h3>로그인</h3>
-	
-	<!--<c:choose>
-    <c:when test="${sessionScope.loginCheck eq true}">
-        ${sessionScope.id} 님이 로그인 되었습니다.  
-        <button type="submit">로그아웃</button>
-    </c:when>
-    
-    <c:otherwise>
-        <form id="loginForm">
-            <input name="id"/>
-            <input name="pw"/>
-            <button type="submit">로그인</button>
-        </form>
-    </c:otherwise>
-	</c:choose>-->
 
 	<form action="/healthproject/signin" method="post">
 		ID : <input type="text" id="id"	name="id"> <br> 

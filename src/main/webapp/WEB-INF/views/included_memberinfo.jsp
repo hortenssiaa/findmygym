@@ -35,11 +35,16 @@
 						"<h3>" + serverdata.name + "님("
 						+ serverdata.id + ") 로그인상태입니다. </h3><br>"
 						+ "<img alt='my profile' src='/img/" + serverdata.filepath + "'> <br>"
-						+ "<input id='signoutbtn' type=button value='로그아웃'>"
+						+ "<input id='signoutbtn' type=button value='로그아웃'> "
+						+ "<input type='button' id='gotowriteform' value='글쓰기'>"
 						); // memberinf로 mapping된 getMemberInfo()에서 리턴되는 값 : vo == serverdata
 						
 						$("#signoutbtn").on("click", function() {
 							location.href="/healthproject/signout"
+						});
+						
+						$("#gotowriteform").on("click", function() {
+							location.href="/healthproject/writeform/"
 						});
 					}
 				});
@@ -52,7 +57,13 @@
 		PW : <input type="password" id="password" name="password">
 		<input id="signinbtn" type="button" value="로그인">
 		<input id="signupbtn" type="button" value="회원가입">
+		<input type="button" id="gotowriteform" value="글쓰기">
 		
+		<script>
+			$("#gotowriteform").on("click", function() {
+				alert("로그인 먼저 해주세요.");
+			});
+		</script>
 	<% } %>
 	</div>
 </body>
