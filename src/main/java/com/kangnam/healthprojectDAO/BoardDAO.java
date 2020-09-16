@@ -60,7 +60,7 @@ public class BoardDAO {
 		
 		System.out.println("\nBoardDAO getBoardDetail() started!!!");
 		try {
-			String sql = "select id, location, filepath, likes, caption from hboard ";
+			String sql = "select seq, id, location, filepath, likes, caption from hboard ";
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -69,6 +69,7 @@ public class BoardDAO {
 
 			while(rs.next()) {
 				BoardVO vo = new BoardVO();
+				vo.setSeq(rs.getInt("seq"));
 				vo.setId(rs.getString("id"));
 				vo.setLocation(rs.getString("location"));
 				vo.setFilepath(rs.getString("filepath"));
@@ -88,4 +89,51 @@ public class BoardDAO {
 		return boardlist;
 	} // getBoardDetail end 
 	
+	
+	public BoardVO getLikes(String likes, int seq) { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+		BoardVO vo = new BoardVO();
+		String sql1="", sql2="";
+
+		try {
+			if(likes.equals("1")) { // add likes
+				sql1 = "select * from hboard " + "where seq= ? ";
+				sql2 = "update hboard set likes = likes+1 where seq= ? ";
+				System.out.println("(/getLikes) likes == 1");
+			} 
+			
+			else if(likes.equals("0")) { // subtract likes
+				sql1 = "select * from hboard " + "where seq= ? ";
+				sql2 = "update hboard set likes = likes-1 where seq= ? ";
+				System.out.println("(/getLikes) likes == 0");
+			} 
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+			PreparedStatement pt1 = con.prepareStatement(sql1);
+			PreparedStatement pt2 = con.prepareStatement(sql2);
+
+			pt1.setInt(1, seq);
+			pt2.setInt(1, seq);
+
+			// db 전송
+			// update 문 먼저 실행 > select
+			pt2.executeUpdate();
+			ResultSet rs = pt1.executeQuery();
+
+			if (rs.next()) {
+				vo.setSeq(rs.getInt("seq"));
+				vo.setLikes(rs.getInt("likes"));
+			}
+
+			rs.close();
+			pt2.close();
+			pt1.close();
+			con.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return vo;
+	}
 }

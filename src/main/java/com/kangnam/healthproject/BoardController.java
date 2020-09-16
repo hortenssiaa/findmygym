@@ -3,16 +3,21 @@ package com.kangnam.healthproject;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kangnam.healthprojectDAO.BoardDAO;
 import com.kangnam.healthprojectVO.BoardVO;
+import com.kangnam.healthprojectVO.MemberVO;
 
 @Controller
 public class BoardController {
@@ -81,5 +86,30 @@ public class BoardController {
 			mv.setViewName("redirect:/boardlist");
 		}
 		return mv;
+	}
+	
+	@RequestMapping(value = "/likesprocess", method= RequestMethod.POST)
+	@ResponseBody
+	public BoardVO getMemberInfo // for home.jsp ajax
+	(HttpSession session , 
+	@RequestParam(value = "likes", required=true) String likes, 
+	@RequestParam(value = "seq", required=true) String seq)
+	{
+		BoardVO vo = null;
+		System.out.printf("(/likesprocess) likes:%s, seq:%s\n",likes,seq);
+		
+		if(likes.equals("1") || likes.equals("0")) {
+			vo = boarddao.getLikes(likes, Integer.parseInt(seq));
+			System.out.println("/likesprocess getLikes done\n");
+		} 
+		
+		vo.getLikes();
+		vo.getSeq();
+		
+		if(vo == null) {
+			System.out.println("(/likesprocess) : vo is null!!");
+		}
+		
+		return vo;
 	}
 }

@@ -43,6 +43,13 @@
 		margin-left: 5px;
 	}
 	
+	#id_style {
+		font-weight: bold;
+	}
+	
+	#likes_num {
+		width: 100px;
+	}
 </style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script>
@@ -70,10 +77,52 @@
 		$(".likes_pic").on('click', function(e) {
 			//alert($(e.target).attr('src'));
 			if ($(e.target).attr('src') == blackbtn) {
+				
 				$(e.target).attr('src', './resources/likebtnred.png');
+				$(e.target).next().next().val("1"); // img 아래 hidden 
+				//alert("seq: "+$(e.target).next().next().next().val()); // hidden seq
+				
+				var likes_status = $(e.target).next().next().val();
+				//alert( "hidden value: " + $(e.target).next().val() ); // hidden, id:likes_hidden
+				//alert($('.likes_pic').next().val());
+				
+				$.ajax({
+					url : '/healthproject/likesprocess', 
+					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val() },
+					type : 'POST',
+					
+					dataType : 'json',
+					success : function (serverdata) {
+						//alert("likes container:"+$(e.target).next().html());
+						$(e.target).next().html
+//						$("#likes_num").html
+						(
+						"Likes : " + serverdata.likes
+						); 
+					}
+				}); // add likes _ $.ajax 완료  
+				
 			} else if ( $(e.target).attr('src') == redbtn ) {
 				$(e.target).attr('src', './resources/likebtnblack.png');
+				$(e.target).next().next().val("0"); // img 아래 hidden 
+				
+				var likes_status = $(e.target).next().next().val();
+				
+				$.ajax({
+					url : '/healthproject/likesprocess', 
+					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val() },
+					type : 'POST',
+					
+					dataType : 'json',
+					success : function (serverdata) {
+						$(e.target).next().html
+						(
+						"Likes : " + serverdata.likes
+						); 
+					}
+				}); // subtract likes _ $.ajax 완료  
 			}
+
 		}); // likes_pic event 요소 갖고오기 
 		
 	})
@@ -84,7 +133,11 @@
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
 				<tr>
-					<td> ${boardlist[listsize-i].id } </td>
+					<td> 
+						<div id="id_style">
+							${boardlist[listsize-i].id } 
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td> ${boardlist[listsize-i].location } </td>
@@ -100,7 +153,11 @@
 					<td> 
 						<div class="likes_container">
 							<img class="likes_pic" alt="board pic" src="./resources/likebtnblack.png">  
-							Likes : ${boardlist[listsize-i].likes } 
+							<div class="likes_pic" id="likes_num">
+								Likes:${boardlist[listsize-i].likes } 
+							</div>
+							<input type="hidden" class="likes_pic" id="likes_hidden" value="here">
+							<input type="hidden" class="likes_pic" id="seq_hidden" value="${boardlist[listsize-i].seq }">
 						</div>
 					</td>
 				</tr>
