@@ -79,6 +79,7 @@ public class BoardController {
 		ArrayList<BoardVO> boardlist = boarddao.getBoardDetail();
 		
 		if(boardlist != null) {
+			System.out.println("(BoardController) boardlist is read.");
 			mv.addObject("boardlist", boardlist);
 			mv.setViewName("board/boardlist");
 		} else {
@@ -93,13 +94,15 @@ public class BoardController {
 	public BoardVO getMemberInfo // for home.jsp ajax
 	(HttpSession session , 
 	@RequestParam(value = "likes", required=true) String likes, 
-	@RequestParam(value = "seq", required=true) String seq)
+	@RequestParam(value = "seq", required=true) String seq,
+	@RequestParam(value = "id", required=true) String id
+	)
 	{
 		BoardVO vo = null;
-		System.out.printf("(/likesprocess) likes:%s, seq:%s\n",likes,seq);
+		System.out.printf("(/likesprocess) likes:%s, seq:%s, id:%s\n",likes,seq,id);
 		
 		if(likes.equals("1") || likes.equals("0")) {
-			vo = boarddao.getLikes(likes, Integer.parseInt(seq));
+			vo = boarddao.getLikes(likes, Integer.parseInt(seq), id);
 			System.out.println("/likesprocess getLikes done\n");
 		} 
 		

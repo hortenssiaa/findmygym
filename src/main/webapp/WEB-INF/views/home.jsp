@@ -11,8 +11,7 @@
 	$(document).ready(function() {
 		$("#signupbtn").on("click", function() {
 			location.href="/healthproject/signup/"
-		});
-		
+		});		
 		
  		$("#signinbtn").on("click", function() {
 			$.ajax({

@@ -26,7 +26,6 @@
 		<tr>
 			<th> 작성자 ID </th>
 			<td> java : <%=loginid %> </td>
-			<td> db : ${boardvo.id } </td>
 		</tr>
 		<tr>
 			<th> 작성 위치 </th>

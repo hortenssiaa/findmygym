@@ -51,84 +51,17 @@
 		width: 100px;
 	}
 </style>
-<script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
-<script>
-	$(document).ready(function() {
-		var likes_arr = $(".likes_pic").get();
-		
-		var blackbtn = "./resources/likebtnblack.png";
-		var redbtn = "./resources/likebtnred.png";
-		
-		for(var i=0; i < likes_arr.length; i++) {
-			//alert("likes_arr["+i+"] :"+$(likes_arr[i]).attr('src'))
-			var l_array = [$(likes_arr[i]).attr('src')];
-			if(i>0) {
-				l_array.concat([$(likes_arr[i]).attr('src')]);
-			}
-		}
-		/* for(var i=0; i < likes_arr.length; i++) {
-			alert("l_array["+i+"]: "+[$(likes_arr[i]).attr('src')]);
-		} // likes_arr 배열 확인하기 */ 
-		
-		/* $(".board_photo").on('click', function(e) { 
-			alert($(e.target).attr('src'));
-		}); // board_photo event 요소 갖고오기  */
-		
-		$(".likes_pic").on('click', function(e) {
-			//alert($(e.target).attr('src'));
-			if ($(e.target).attr('src') == blackbtn) {
-				
-				$(e.target).attr('src', './resources/likebtnred.png');
-				$(e.target).next().next().val("1"); // img 아래 hidden 
-				//alert("seq: "+$(e.target).next().next().next().val()); // hidden seq
-				
-				var likes_status = $(e.target).next().next().val();
-				//alert( "hidden value: " + $(e.target).next().val() ); // hidden, id:likes_hidden
-				//alert($('.likes_pic').next().val());
-				
-				$.ajax({
-					url : '/healthproject/likesprocess', 
-					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val() },
-					type : 'POST',
-					
-					dataType : 'json',
-					success : function (serverdata) {
-						//alert("likes container:"+$(e.target).next().html());
-						$(e.target).next().html
-//						$("#likes_num").html
-						(
-						"Likes : " + serverdata.likes
-						); 
-					}
-				}); // add likes _ $.ajax 완료  
-				
-			} else if ( $(e.target).attr('src') == redbtn ) {
-				$(e.target).attr('src', './resources/likebtnblack.png');
-				$(e.target).next().next().val("0"); // img 아래 hidden 
-				
-				var likes_status = $(e.target).next().next().val();
-				
-				$.ajax({
-					url : '/healthproject/likesprocess', 
-					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val() },
-					type : 'POST',
-					
-					dataType : 'json',
-					success : function (serverdata) {
-						$(e.target).next().html
-						(
-						"Likes : " + serverdata.likes
-						); 
-					}
-				}); // subtract likes _ $.ajax 완료  
-			}
 
-		}); // likes_pic event 요소 갖고오기 
-		
-	})
-</script>
 </head>
 <body>
+	<%
+		String loginid = "";
+		if(session.getAttribute("loginCheck") != null) {
+			loginid = (String) session.getAttribute("loginid");
+		} else
+			loginid = "notsignedinnull";
+	%>
+		
 	<c:set var="listsize" value="${fn:length(boardlist)}" /> <!--  역순 -->
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
@@ -198,5 +131,78 @@
 		
 		<br> <br> <br>
 	</c:forEach>
+	
+<script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
+<script>
+	$(document).ready(function() {
+		var likes_arr = $(".likes_pic").get();
+		
+		var blackbtn = "./resources/likebtnblack.png";
+		var redbtn = "./resources/likebtnred.png";
+		
+		for(var i=0; i < likes_arr.length; i++) {
+			//alert("likes_arr["+i+"] :"+$(likes_arr[i]).attr('src'))
+			var l_array = [$(likes_arr[i]).attr('src')];
+			if(i>0) {
+				l_array.concat([$(likes_arr[i]).attr('src')]);
+			}
+		}
+		/* for(var i=0; i < likes_arr.length; i++) {
+			alert("l_array["+i+"]: "+[$(likes_arr[i]).attr('src')]);
+		} // likes_arr 배열 확인하기 */ 
+		
+		/* $(".board_photo").on('click', function(e) { 
+			alert($(e.target).attr('src'));
+		}); // board_photo event 요소 갖고오기  */
+		
+		var loginid = '<%=loginid %>';
+		var likes_status;
+		
+		$(".likes_pic").on('click', function(e) {
+		
+			if( !(loginid == "notsignedinnull")) {
+		
+				//alert($(e.target).attr('src'));
+				if ($(e.target).attr('src') == blackbtn) {
+					
+					$(e.target).attr('src', './resources/likebtnred.png');
+					$(e.target).next().next().val("1"); // img 아래 hidden 
+					//alert("seq: "+$(e.target).next().next().next().val()); // hidden seq
+					//alert( "hidden value: " + $(e.target).next().val() ); // hidden, id:likes_hidden
+					//alert($('.likes_pic').next().val());
+					
+					likes_status = $(e.target).next().next().val();
+				} else if ( $(e.target).attr('src') == redbtn ) {
+					$(e.target).attr('src', './resources/likebtnblack.png');
+					$(e.target).next().next().val("0"); // img 아래 hidden 
+					
+					likes_status = $(e.target).next().next().val();
+				}	
+					
+				$.ajax({
+					url : '/healthproject/likesprocess', 
+					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val(), 'id':loginid },
+					type : 'POST',
+					
+					dataType : 'json',
+					success : function (serverdata) {
+						//alert("likes container:"+$(e.target).next().html());
+						$(e.target).next().html
+//						$("#likes_num").html
+						(
+						"Likes : " + serverdata.likes
+						); 
+					}
+				}); // add likes _ $.ajax 완료  
+				
+			} else {
+				alert("로그인 먼저 해주세요.");
+				location.href="/healthproject/signin";
+			}
+
+		}); // likes_pic event 요소 갖고오기 
+		
+	})
+</script>
 </body>
 </html>

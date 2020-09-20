@@ -57,53 +57,96 @@ public class BoardDAO {
 	
 	public ArrayList<BoardVO> getBoardDetail() {
 		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
-		
 		System.out.println("\nBoardDAO getBoardDetail() started!!!");
-		try {
-			String sql = "select seq, id, location, filepath, likes, caption from hboard ";
-
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
-			PreparedStatement pt = con.prepareStatement(sql);
-			ResultSet rs = pt.executeQuery();
-
-			while(rs.next()) {
-				BoardVO vo = new BoardVO();
-				vo.setSeq(rs.getInt("seq"));
-				vo.setId(rs.getString("id"));
-				vo.setLocation(rs.getString("location"));
-				vo.setFilepath(rs.getString("filepath"));
-				vo.setLikes(rs.getInt("likes"));
-				vo.setCaption(rs.getString("caption"));
-				boardlist.add(vo);
+		
+		if (session.getAttribute("loginCheck") != null) {
+			try {
+				String sql = "select hl.id as id, hl.seq as seq, hb.likes as likes, " +
+						"hb.location as location, hb.filepath as filepath, hb.caption as caption " + 
+						"from hboard hb, hlikes hl " + 
+						"where hb.seq = hl.seq " + 
+						"and hl.id = ? ";
+	
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+				PreparedStatement pt = con.prepareStatement(sql);
+				
+				pt.setString(1, (String)session.getAttribute("loginid"));
+				System.out.printf("(DAO getBoardDetail) session id :%s\n",(String)session.getAttribute("loginid"));
+				
+				ResultSet rs = pt.executeQuery();
+				System.out.println(rs.next());
+	
+				System.out.println("ㅡㅡ1 ");
+				while(rs.next()) {
+					System.out.println("ㅡㅡ 2");
+					BoardVO vo = new BoardVO();
+					vo.setId(rs.getString("id"));
+					vo.setSeq(rs.getInt("seq"));
+					vo.setLikes(rs.getInt("likes"));
+					vo.setLocation(rs.getString("location"));
+					vo.setFilepath(rs.getString("filepath"));
+					vo.setCaption(rs.getString("caption"));
+					boardlist.add(vo);
+				}
+	
+				System.out.println("ㅡㅡ 3");
+				rs.close();
+				pt.close();
+				con.close();
+	
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			rs.close();
-			pt.close();
-			con.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			try {
+				String sql = "select seq, id, location, filepath, likes, caption from hboard ";
+	
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+				PreparedStatement pt = con.prepareStatement(sql);
+				ResultSet rs = pt.executeQuery();
+	
+				while(rs.next()) {
+					BoardVO vo = new BoardVO();
+					vo.setSeq(rs.getInt("seq"));
+					vo.setId(rs.getString("id"));
+					vo.setLocation(rs.getString("location"));
+					vo.setFilepath(rs.getString("filepath"));
+					vo.setLikes(rs.getInt("likes"));
+					vo.setCaption(rs.getString("caption"));
+					boardlist.add(vo);
+				}
+	
+				rs.close();
+				pt.close();
+				con.close();
+	
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return boardlist;
 	} // getBoardDetail end 
 	
 	
-	public BoardVO getLikes(String likes, int seq) { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+	public BoardVO getLikes(String likes, int seq, String id) { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
 		BoardVO vo = new BoardVO();
-		String sql1="", sql2="";
+		String sql1="", sql2="", sql3="";
 
 		try {
-			if(likes.equals("1")) { // add likes
+			if(likes.equals("1")) { // like
 				sql1 = "select * from hboard " + "where seq= ? ";
 				sql2 = "update hboard set likes = likes+1 where seq= ? ";
+				sql3 = "insert into hlikes values( ?, ? ) ";
 				System.out.println("(/getLikes) likes == 1");
 			} 
 			
-			else if(likes.equals("0")) { // subtract likes
+			else if(likes.equals("0")) { // dislike
 				sql1 = "select * from hboard " + "where seq= ? ";
 				sql2 = "update hboard set likes = likes-1 where seq= ? ";
+				sql3 = "delete from hlikes where id= ? and seq= ? ";
 				System.out.println("(/getLikes) likes == 0");
 			} 
 			
@@ -111,13 +154,18 @@ public class BoardDAO {
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
 			PreparedStatement pt1 = con.prepareStatement(sql1);
 			PreparedStatement pt2 = con.prepareStatement(sql2);
+			PreparedStatement pt3 = con.prepareStatement(sql3);
 
 			pt1.setInt(1, seq);
 			pt2.setInt(1, seq);
+			pt2.setString(1, id);
+			pt3.setInt(2, seq);
 
 			// db 전송
 			// update 문 먼저 실행 > select
 			pt2.executeUpdate();
+			pt3.executeUpdate();
+			
 			ResultSet rs = pt1.executeQuery();
 
 			if (rs.next()) {
@@ -126,6 +174,7 @@ public class BoardDAO {
 			}
 
 			rs.close();
+			pt3.close();
 			pt2.close();
 			pt1.close();
 			con.close();
