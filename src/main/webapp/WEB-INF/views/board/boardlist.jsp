@@ -58,11 +58,17 @@
 		String loginid = "";
 		if(session.getAttribute("loginCheck") != null) {
 			loginid = (String) session.getAttribute("loginid");
+			System.out.println(loginid);
 		} else
 			loginid = "notsignedinnull";
 	%>
 		
+ 	<%
+		if(session.getAttribute("loginCheck") != null) { // 로그인 돼 있을 때 
+	%> 
 	<c:set var="listsize" value="${fn:length(boardlist)}" /> <!--  역순 -->
+	${fn:length(boardlist)}
+	
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
 				<tr>
@@ -74,6 +80,9 @@
 				</tr>
 				<tr>
 					<td> ${boardlist[listsize-i].location } </td>
+				</tr>
+				<tr>
+					<td> seq:${boardlist[listsize-i].seq } </td>
 				</tr>
 				<tr>
 					<td> 
@@ -131,6 +140,55 @@
 		
 		<br> <br> <br>
 	</c:forEach>
+ 	<%
+		} else { // 로그인 안돼 있을 때 
+	%> 
+	
+	<c:set var="listsize" value="${fn:length(boardlist)}" /> <!--  역순 -->
+	${fn:length(boardlist)}
+		<c:forEach var="i" begin="1" end="${listsize}"> 
+		 	<table align="center">
+				<tr>
+					<td> 
+						<div id="id_style">
+							${boardlist[listsize-i].id } 
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td> ${boardlist[listsize-i].location } </td>
+				</tr>
+				<tr>
+					<td> seq:${boardlist[listsize-i].seq } </td>
+				</tr>
+				<tr>
+					<td> 
+						<p class="board_pic">
+							<img class="board_photo" alt="board pic" src="/img/${boardlist[listsize-i].filepath }">  
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td> 
+						<div class="likes_container">
+							<img class="likes_pic" id="like_img" alt="board pic" src="./resources/likebtnblack.png">  
+							<div class="likes_pic" id="likes_num">
+								Likes:${boardlist[listsize-i].likes } 
+							</div>
+							<input type="hidden" class="likes_pic" id="likes_hidden" value="here">
+							<input type="hidden" class="likes_pic" id="seq_hidden" value="${boardlist[listsize-i].seq }">
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td> ${boardlist[listsize-i].caption } </td>
+				</tr>
+			</table>
+			<br> <br> <br>
+	</c:forEach>
+	<%
+		}
+	%>
 	
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script>
@@ -157,9 +215,35 @@
 		
 		var loginid = '<%=loginid %>';
 		var likes_status;
+		var total_list = ${fn:length(boardlist)};
+ 
+		if( !(loginid == "notsignedinnull")) {
+			$.ajax({
+				url : '/healthproject/getlikeddata', 
+				type : 'POST',
+
+				dataType : 'json',
+				success : function (serverdata) {
+					for(var i=0; i<total_list; i++) {
+						alert(serverdata[i].seq);
+						alert("seq:"+$("#seq_hidden").val());
+						if($("#seq_hidden").val() == serverdata[i].seq) {
+							alert(1000);
+							alert($("#like_img").attr('src'));
+							$("#like_img").attr('src', './resources/likebtnred.png');
+						}
+					}
+					
+					/* $(e.target).next().html
+					(
+					"Likes : " + serverdata.likes
+					);  */
+				}
+			}); // get liked article_ $.ajax 완료  
+			//alert(1);
+		}
 		
-		$(".likes_pic").on('click', function(e) {
-		
+ 		$(".likes_pic").on('click', function(e) {
 			if( !(loginid == "notsignedinnull")) {
 		
 				//alert($(e.target).attr('src'));
@@ -183,7 +267,7 @@
 					url : '/healthproject/likesprocess', 
 					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val(), 'id':loginid },
 					type : 'POST',
-					
+
 					dataType : 'json',
 					success : function (serverdata) {
 						//alert("likes container:"+$(e.target).next().html());

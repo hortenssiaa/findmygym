@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,46 +60,6 @@ public class BoardDAO {
 		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
 		System.out.println("\nBoardDAO getBoardDetail() started!!!");
 		
-		if (session.getAttribute("loginCheck") != null) {
-			try {
-				String sql = "select hl.id as id, hl.seq as seq, hb.likes as likes, " +
-						"hb.location as location, hb.filepath as filepath, hb.caption as caption " + 
-						"from hboard hb, hlikes hl " + 
-						"where hb.seq = hl.seq " + 
-						"and hl.id = ? ";
-	
-				Class.forName("oracle.jdbc.driver.OracleDriver");
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
-				PreparedStatement pt = con.prepareStatement(sql);
-				
-				pt.setString(1, (String)session.getAttribute("loginid"));
-				System.out.printf("(DAO getBoardDetail) session id :%s\n",(String)session.getAttribute("loginid"));
-				
-				ResultSet rs = pt.executeQuery();
-				System.out.println(rs.next());
-	
-				System.out.println("ㅡㅡ1 ");
-				while(rs.next()) {
-					System.out.println("ㅡㅡ 2");
-					BoardVO vo = new BoardVO();
-					vo.setId(rs.getString("id"));
-					vo.setSeq(rs.getInt("seq"));
-					vo.setLikes(rs.getInt("likes"));
-					vo.setLocation(rs.getString("location"));
-					vo.setFilepath(rs.getString("filepath"));
-					vo.setCaption(rs.getString("caption"));
-					boardlist.add(vo);
-				}
-	
-				System.out.println("ㅡㅡ 3");
-				rs.close();
-				pt.close();
-				con.close();
-	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
 			try {
 				String sql = "select seq, id, location, filepath, likes, caption from hboard ";
 	
@@ -125,7 +86,6 @@ public class BoardDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
 		
 		return boardlist;
 	} // getBoardDetail end 
@@ -158,7 +118,7 @@ public class BoardDAO {
 
 			pt1.setInt(1, seq);
 			pt2.setInt(1, seq);
-			pt2.setString(1, id);
+			pt3.setString(1, id);
 			pt3.setInt(2, seq);
 
 			// db 전송
@@ -171,6 +131,7 @@ public class BoardDAO {
 			if (rs.next()) {
 				vo.setSeq(rs.getInt("seq"));
 				vo.setLikes(rs.getInt("likes"));
+				vo.setId(rs.getString("id"));
 			}
 
 			rs.close();
@@ -185,4 +146,56 @@ public class BoardDAO {
 		
 		return vo;
 	}
+
+	
+	public ArrayList<BoardVO> getlikedinfo() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
+		
+		try {
+				String sql = "select id, seq from hlikes where id= 'test8' ";
+//				String sql = "select hl.id as id, hl.seq as seq, hb.likes as likes, " +
+//						"hb.location as location, hb.filepath as filepath, hb.caption as caption " + 
+//						"from hboard hb, hlikes hl " + 
+//						"where hb.seq = hl.seq " + 
+//						"and hl.id = ? ";
+		
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+				PreparedStatement pt = con.prepareStatement(sql);
+				
+//				pt.setString(1, (String)session.getAttribute("loginid"));
+				System.out.printf("(DAO getlikedinfo) session id :%s\n",(String)session.getAttribute("loginid"));
+				
+				ResultSet rs = pt.executeQuery();
+//				System.out.println(rs.next());
+		
+				while(rs.next()) {
+					System.out.println("(DAO getBoardDetail) 3");
+					BoardVO vo = new BoardVO();
+					vo.setId(rs.getString("id"));
+					vo.setSeq(rs.getInt("seq"));
+//					vo.setLikes(rs.getInt("likes"));
+//					vo.setLocation(rs.getString("location"));
+//					vo.setFilepath(rs.getString("filepath"));
+//					vo.setCaption(rs.getString("caption"));
+					boardlist.add(vo);
+				}
+				
+				System.out.printf("boardlist.size :%d\n", boardlist.size());
+				for(int i=0; i<boardlist.size(); i++) {
+					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+				}
+				
+				rs.close();
+				pt.close();
+				con.close();
+	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardlist;
+	}
 }
+

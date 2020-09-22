@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.border.Border;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -74,7 +76,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/boardlist")
-	public ModelAndView getBoardList() {
+	public ModelAndView getBoardList(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		ArrayList<BoardVO> boardlist = boarddao.getBoardDetail();
 		
@@ -87,11 +89,27 @@ public class BoardController {
 			mv.setViewName("redirect:/boardlist");
 		}
 		return mv;
+//		ModelAndView mv = new ModelAndView();
+//		ArrayList<BoardVO> boardlist = null;
+//		if(session.getAttribute("loginCheck") != null)
+//			boardlist = boarddao.getlikedinfo();
+//		else
+//			boardlist = boarddao.getBoardDetail();
+//		
+//		if(boardlist != null) {
+//			System.out.println("(BoardController) boardlist is read.");
+//			mv.addObject("boardlist", boardlist);
+//			mv.setViewName("board/boardlist");
+//		} else {
+//			System.out.println("(BoardController) boardlist is null!!");
+//			mv.setViewName("redirect:/boardlist");
+//		}
+//		return mv;
 	}
 	
 	@RequestMapping(value = "/likesprocess", method= RequestMethod.POST)
 	@ResponseBody
-	public BoardVO getMemberInfo // for home.jsp ajax
+	public BoardVO getMemberInfo // for boardlist.jsp ajax
 	(HttpSession session , 
 	@RequestParam(value = "likes", required=true) String likes, 
 	@RequestParam(value = "seq", required=true) String seq,
@@ -114,5 +132,29 @@ public class BoardController {
 		}
 		
 		return vo;
+	}
+
+	@RequestMapping(value = "/getlikeddata", method= RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<BoardVO> getLikedData // for boardlist.jsp ajax
+	(HttpSession session)
+	{
+		ArrayList<BoardVO> likedlist = null;
+		
+		likedlist = boarddao.getlikedinfo();
+		System.out.println("\n/getlikeddata getLikes done\n");
+		System.out.printf("likedlist.size() : %s\n", likedlist.size());
+		
+		for(int i=0; i<likedlist.size(); i++) {
+//			likedlist.get(i);
+			likedlist.get(i).getId();
+			likedlist.get(i).getSeq();
+		}
+		
+		if(likedlist == null) {
+			System.out.println("(/getlikeddata) : likedlist is null!!");
+		}
+		
+		return likedlist;
 	}
 }
