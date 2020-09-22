@@ -82,19 +82,21 @@
 					<td> ${boardlist[listsize-i].location } </td>
 				</tr>
 				<tr>
-					<td> seq:${boardlist[listsize-i].seq } </td>
+					<td> <p>
+						seq:${boardlist[listsize-i].seq } 
+					</p></td> 
 				</tr>
 				<tr>
 					<td> 
-						<p class="board_pic">
+						<div class="board_pic">
 							<img class="board_photo" alt="board pic" src="/img/${boardlist[listsize-i].filepath }">  
-						</p>
+						</div>
 					</td>
 				</tr>
 				<tr>
 					<td> 
 						<div class="likes_container">
-							<img class="likes_pic" alt="board pic" src="./resources/likebtnblack.png">  
+							<img class="likes_pic" alt="board pic" src="./resources/likebtnblack.png"> 
 							<div class="likes_pic" id="likes_num">
 								Likes:${boardlist[listsize-i].likes } 
 							</div>
@@ -224,13 +226,21 @@
 
 				dataType : 'json',
 				success : function (serverdata) {
+					var i=0
+			        $( 'p' ).each( function() {
+			          $( this ).addClass( 'sseq' + i );
+			          i += 1;
+			        } ); 
+					
 					for(var i=0; i<total_list; i++) {
-						alert(serverdata[i].seq);
-						alert("seq:"+$("#seq_hidden").val());
+						//alert(serverdata[i].seq);
+						alert($('p').html());
+						//alert("seq:"+ $('.sseq'+i).html());
+						//alert("seq:"+$("#seq_hidden").val());
+						//alert($("#like_img:nth-child("+i+")").val());
 						if($("#seq_hidden").val() == serverdata[i].seq) {
-							alert(1000);
-							alert($("#like_img").attr('src'));
-							$("#like_img").attr('src', './resources/likebtnred.png');
+							alert($("img.likes_pic"));
+							$("img.likes_pic").attr('src', './resources/likebtnred.png');
 						}
 					}
 					
