@@ -67,7 +67,6 @@
 		if(session.getAttribute("loginCheck") != null) { // 로그인 돼 있을 때 
 	%> 
 	<c:set var="listsize" value="${fn:length(boardlist)}" /> <!--  역순 -->
-	${fn:length(boardlist)}
 	
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
@@ -82,9 +81,9 @@
 					<td> ${boardlist[listsize-i].location } </td>
 				</tr>
 				<tr>
-					<td> <p>
+					<td>
 						seq:${boardlist[listsize-i].seq } 
-					</p></td> 
+					</td> 
 				</tr>
 				<tr>
 					<td> 
@@ -96,7 +95,9 @@
 				<tr>
 					<td> 
 						<div class="likes_container">
-							<img class="likes_pic" alt="board pic" src="./resources/likebtnblack.png"> 
+							<p>
+								<img class="likes_pic" alt="board pic" src="./resources/likebtnblack.png">
+							</p>
 							<div class="likes_pic" id="likes_num">
 								Likes:${boardlist[listsize-i].likes } 
 							</div>
@@ -147,7 +148,6 @@
 	%> 
 	
 	<c:set var="listsize" value="${fn:length(boardlist)}" /> <!--  역순 -->
-	${fn:length(boardlist)}
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
 				<tr>
@@ -226,62 +226,62 @@
 
 				dataType : 'json',
 				success : function (serverdata) {
-					var i=0
-			        $( 'p' ).each( function() {
-			          $( this ).addClass( 'sseq' + i );
-			          i += 1;
-			        } ); 
+					var k=0
+			        $('p').each(function() {
+			          $(this).addClass('sseq' + k);
+			          k += 1;
+			        }); 
 					
-					for(var i=0; i<total_list; i++) {
-						//alert(serverdata[i].seq);
-						alert($('p').html());
-						//alert("seq:"+ $('.sseq'+i).html());
-						//alert("seq:"+$("#seq_hidden").val());
-						//alert($("#like_img:nth-child("+i+")").val());
-						if($("#seq_hidden").val() == serverdata[i].seq) {
-							alert($("img.likes_pic"));
-							$("img.likes_pic").attr('src', './resources/likebtnred.png');
-						}
+//					for(var i=0; i<total_list; i++) {
+					for(var i=0; i<serverdata.length; i++) {
+						var server_seq = new Array();
+						
+						// 아래, hboard seq 정리시; server_seq[i] = 11 - serverdata[i].seq; 사용할 것!
+						if(serverdata[i].seq < 3)
+							server_seq[i] = 8 - serverdata[i].seq;
+						else	
+							server_seq[i] = 11 - serverdata[i].seq;
+						//alert(server_seq[i]);
+						//alert($('.sseq' + server_seq[i]).next().next().next().val());
+						//	alert($('.sseq' + i));
+							$('.sseq' + server_seq[i]).children().attr('src', './resources/likebtnred.png');
 					}
-					
-					/* $(e.target).next().html
-					(
-					"Likes : " + serverdata.likes
-					);  */
 				}
 			}); // get liked article_ $.ajax 완료  
 			//alert(1);
 		}
 		
- 		$(".likes_pic").on('click', function(e) {
+ 		$("img.likes_pic").on('click', function(e) {
+ 		
 			if( !(loginid == "notsignedinnull")) {
 		
+// 			alert(1);
 				//alert($(e.target).attr('src'));
 				if ($(e.target).attr('src') == blackbtn) {
 					
 					$(e.target).attr('src', './resources/likebtnred.png');
-					$(e.target).next().next().val("1"); // img 아래 hidden 
+					$(e.target).parent().next().next().val("1"); // img 아래 hidden 
 					//alert("seq: "+$(e.target).next().next().next().val()); // hidden seq
 					//alert( "hidden value: " + $(e.target).next().val() ); // hidden, id:likes_hidden
 					//alert($('.likes_pic').next().val());
 					
-					likes_status = $(e.target).next().next().val();
+					likes_status = $(e.target).parent().next().next().val();
 				} else if ( $(e.target).attr('src') == redbtn ) {
 					$(e.target).attr('src', './resources/likebtnblack.png');
-					$(e.target).next().next().val("0"); // img 아래 hidden 
+					$(e.target).parent().next().next().val("0"); // img 아래 hidden 
 					
-					likes_status = $(e.target).next().next().val();
+					likes_status = $(e.target).parent().next().next().val();
 				}	
 					
 				$.ajax({
 					url : '/healthproject/likesprocess', 
-					data : { 'likes':likes_status, 'seq': $(e.target).next().next().next().val(), 'id':loginid },
+					data : { 'likes':likes_status, 'seq': $(e.target).parent().next().next().next().val(), 'id':loginid },
 					type : 'POST',
 
 					dataType : 'json',
 					success : function (serverdata) {
 						//alert("likes container:"+$(e.target).next().html());
-						$(e.target).next().html
+						$(e.target).parent().next().html
 //						$("#likes_num").html
 						(
 						"Likes : " + serverdata.likes
