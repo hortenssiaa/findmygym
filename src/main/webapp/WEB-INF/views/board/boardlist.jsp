@@ -243,8 +243,7 @@
 							server_seq[i] = 11 - serverdata[i].seq;
 						//alert(server_seq[i]);
 						//alert($('.sseq' + server_seq[i]).next().next().next().val());
-						//	alert($('.sseq' + i));
-							$('.sseq' + server_seq[i]).children().attr('src', './resources/likebtnred.png');
+						$('.sseq' + server_seq[i]).children().attr('src', './resources/likebtnred.png');
 					}
 				}
 			}); // get liked article_ $.ajax 완료  
