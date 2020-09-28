@@ -8,6 +8,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
+	html {
+			background-color: #FAFAFA;
+	}
+		
 	.board_photo {
 		width: auto; height: auto;
     	max-width: 500px;
@@ -22,6 +26,8 @@
 	table {
 		width: 34%;
 		border-collapse: collapse;
+		border: 1px solid #D7D7D7;
+		background-color: #FFFFFF;
 	}
 	
 	th, td {
@@ -34,6 +40,14 @@
 		background-color: #f5f5f5;
 	}
 	
+	.table_header { /* 아직 사용 안함 */
+		/* position: absolute;  */
+		top: -5px; 
+		left: -5px; 
+		width: 42px; 
+		height: 42px;
+	}
+	
 	.likes_pic {
     	width: 25px;
     	height: 25px;
@@ -42,13 +56,29 @@
 	.likes_container {
 		margin-left: 5px;
 	}
+	
+	.profile_box {
+		width: 42px;
+    	height: 42px; 
+    	border-radius: 70%;
+    	overflow: hidden;
+    	border: 1px solid #D7D7D7;
+    	/* position: absolute; */
+	}
+	
+	#profile_pic {
+		width: 100%;
+   		height: 100%;
+   		object-fit: cover;
+   		
+	}
 
 	#bookmark_pic {
     	width: 25px;
     	height: 25px;
 	}
 	
-	#id_style {
+	.id_style {
 		font-weight: bold;
 	}
 	
@@ -76,9 +106,12 @@
 		<c:forEach var="i" begin="1" end="${listsize}"> 
 		 	<table align="center">
 				<tr>
-					<td> 
-						<div id="id_style">
-							${boardlist[listsize-i].id } 
+					<td>
+						<div class="profile_box">
+							<img id="profile_pic" src="" alt="${boardlist[listsize-i].id}'s profile">
+						</div>
+						<div class="id_style">
+							<div>${boardlist[listsize-i].id }</div>
 						</div>
 					</td>
 				</tr>
@@ -87,7 +120,9 @@
 				</tr>
 				<tr>
 					<td>
-						seq:${boardlist[listsize-i].seq } 
+						<div class="seq_container">
+							<div>${boardlist[listsize-i].seq }</div>
+						</div>
 					</td> 
 				</tr>
 				<tr>
@@ -162,8 +197,11 @@
 		 	<table align="center">
 				<tr>
 					<td> 
-						<div id="id_style">
-							${boardlist[listsize-i].id } 
+						<div class="profile_box">
+							<img id="profile_pic" src="" alt="${boardlist[listsize-i].id}'s profile">
+						</div>
+						<div class="id_style">
+							<div>${boardlist[listsize-i].id }</div>
 						</div>
 					</td>
 				</tr>
@@ -171,7 +209,11 @@
 					<td> ${boardlist[listsize-i].location } </td>
 				</tr>
 				<tr>
-					<td> seq:${boardlist[listsize-i].seq } </td>
+					<td>
+						<div class="seq_container">
+							<div>${boardlist[listsize-i].seq }</div>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td> 
@@ -231,6 +273,37 @@
 		var likes_status;
 		var bm_status;
 		var total_list = ${fn:length(boardlist)};
+		
+		//alert($(".seq_container").children().html());
+		$.ajax({
+			url : '/healthproject/getboardlistprofile', 
+			type : 'POST',
+
+			dataType : 'json',
+			success : function (serverdata) {
+				var num=0
+		        $('.id_style').children().each(function() {
+		          $(this).addClass('seq_c' + num);
+		          num += 1;
+		        }); 
+				
+				var u=0
+				$('.profile_box>img').each(function() {
+			       $(this).addClass('seq_img' + u);
+			       u += 1;
+			     }); 
+				//alert(num);
+				
+				for(var i=0; i<num; i++) {
+					for(var j=0; j<serverdata.length; j++) {
+						if($('.seq_c'+i).html() == serverdata[j].id) {
+							var profile_path = '/img'+serverdata[j].filepath+'?timestamp=' + new Date().getTime();
+							$('.seq_img'+i).attr('src', profile_path);
+						}
+					}
+				}
+			}
+		}); // get board list profile pictures _ $.ajax 완료 
  
 		if( !(loginid == "notsignedinnull")) { // 로그인 되어 있으면, 
 			

@@ -5,7 +5,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Home</title>
+<style type="text/css">
+	.profile_box {
+		width: 150px;
+    	height: 150px; 
+    	border-radius: 70%;
+    	overflow: hidden;
+    	/* position: absolute; */
+	}
 	
+	.profile_pic {
+		width: 100%;
+   		height: 100%;
+   		object-fit: cover;
+   		
+	}
+</style>	
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {

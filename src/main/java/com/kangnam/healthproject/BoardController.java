@@ -202,4 +202,46 @@ public class BoardController {
 		} 
 		
 	}
+	
+	// 로그인 했을 때 들어가는 POST 형식으로 바꿀 것! method= RequestMethod.POST
+	@RequestMapping("/mybookmark")
+	public ModelAndView getMyBookmarkList(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		ArrayList<BoardVO> boardlist = boarddao.getMyBookmarkInfo();
+		
+		if(boardlist != null) {
+			System.out.println("(getMyBookmarkInfo) boardlist is read.");
+			mv.addObject("boardlist", boardlist);
+			mv.setViewName("board/mybookmarklist");
+		} else {
+			System.out.println("(getMyBookmarkInfo) boardlist is null!!");
+			mv.setViewName("/");
+		}
+		return mv;
+	}
+
+	@RequestMapping(value = "/getboardlistprofile", method= RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<BoardVO> getBoardProfile // for boardlist.jsp ajax
+	(HttpSession session)
+	{
+		ArrayList<BoardVO> boardprofilelist = null;
+		
+		boardprofilelist = boarddao.getBoardProfile();
+		System.out.println("\n/getlikeddata getLikes done\n");
+		System.out.printf("boardprofilelist.size() : %s\n", boardprofilelist.size());
+		
+		for(int i=0; i<boardprofilelist.size(); i++) {
+//			likedlist.get(i);
+			boardprofilelist.get(i).getId();
+			boardprofilelist.get(i).getFilepath();
+		}
+		
+		if(boardprofilelist == null) {
+			System.out.println("(/getBoardProfile) : boardprofilelist is null!!");
+		}
+		
+		return boardprofilelist;
+		
+	}
 }

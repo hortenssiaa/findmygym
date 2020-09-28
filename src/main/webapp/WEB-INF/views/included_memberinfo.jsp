@@ -6,6 +6,22 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
+<style type="text/css">
+	.profile_box {
+		width: 150px;
+    	height: 150px; 
+    	border-radius: 70%;
+    	overflow: hidden;
+    	/* position: absolute; */
+	}
+	
+	.profile_pic {
+		width: 100%;
+   		height: 100%;
+   		object-fit: cover;
+   		
+	}
+</style>
 </head>
 <body>
 	<div id="signinform">
@@ -34,7 +50,9 @@
 						(
 						"<h3>" + serverdata.name + "님("
 						+ serverdata.id + ") 로그인상태입니다. </h3><br>"
-						+ "<img alt='my profile' src='/img/" + serverdata.filepath + "'> <br>"
+						+ "<div class='profile_box' >"
+						+ "<img class='profile_pic' alt='my profile' src='/img/" + serverdata.filepath + "'> <br>"
+						+ "</div>"
 						+ "<input id='signoutbtn' type=button value='로그아웃'> "
 						+ "<input type='button' id='gotowriteform' value='글쓰기'>"
 						); // memberinf로 mapping된 getMemberInfo()에서 리턴되는 값 : vo == serverdata
@@ -45,6 +63,21 @@
 						
 						$("#gotowriteform").on("click", function() {
 							location.href="/healthproject/writeform/"
+						});
+						
+						$(".profile_box").css
+						({
+							'width':'150px', 
+							'height': '150px', 
+							'border-radius': '70%', 
+							'overflow': 'hidden'
+						});
+
+						$(".profile_pic").css
+						({
+							'width':'100%', 
+							'height': '100%', 
+							'object-fit': 'cover'
 						});
 					}
 				});

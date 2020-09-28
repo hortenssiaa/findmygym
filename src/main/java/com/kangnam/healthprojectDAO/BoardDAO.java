@@ -291,5 +291,99 @@ public class BoardDAO {
 		
 		return boardlist;
 	}
+
+	public ArrayList<BoardVO> getMyBookmarkInfo() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
+		
+		String loginid = (String)session.getAttribute("loginid");
+		System.out.printf("(DAO getMyBookmarkInfo) session id :%s\n",(String)session.getAttribute("loginid"));
+		
+		try {
+			String sql = "select hbm.id id, hbm.seq seq, hb.likes likes, hb.location location, " +
+						"hb.filepath filepath, hb.caption caption " + 
+						"from hboard hb join hbookmark hbm " + 
+						"on hb.seq = hbm.seq " + 
+						"and hbm.id = ? ";
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+			PreparedStatement pt = con.prepareStatement(sql);
+			
+			pt.setString(1, loginid);
+			
+			ResultSet rs = pt.executeQuery();
+			
+			while(rs.next()) {
+				System.out.println("(DAO getMyBookmarkInfo) #3단계");
+				BoardVO vo = new BoardVO();
+				vo.setId(rs.getString("id"));
+				vo.setSeq(rs.getInt("seq"));
+				vo.setLikes(rs.getInt("likes"));
+				vo.setLocation(rs.getString("location"));
+				vo.setFilepath(rs.getString("filepath"));
+				vo.setCaption(rs.getString("caption"));
+				boardlist.add(vo);
+			}
+			
+			 // Bookmarked 게시물 정보 표시 
+				System.out.printf("boardlist.size :%d\n", boardlist.size());
+				for(int i=0; i<boardlist.size(); i++) {
+					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+				}
+			
+			rs.close();
+			pt.close();
+			con.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardlist;
+	}
+
+	public ArrayList<BoardVO> getBoardProfile() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
+		
+		String loginid = (String)session.getAttribute("loginid");
+		System.out.printf("(DAO getMyBookmarkInfo) session id :%s\n",(String)session.getAttribute("loginid"));
+		
+		try {
+			String sql = "select DISTINCT mb.filepath filepath, mb.id id " + 
+						"from hboard hb join member2 mb " + 
+						"on hb.id = mb.id ";
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+			PreparedStatement pt = con.prepareStatement(sql);
+			
+			ResultSet rs = pt.executeQuery();
+			
+			while(rs.next()) {
+				System.out.println("(DAO getBoardProfile) rs.next 단계");
+				BoardVO vo = new BoardVO();
+				vo.setId(rs.getString("id"));
+				vo.setFilepath(rs.getString("filepath"));
+				boardlist.add(vo);
+			}
+			
+			// Board list Profile picture 게시물 정보 표시 
+			System.out.printf("(DAO getBoardProfile) boardlist.size :%d\n", boardlist.size());
+			for(int i=0; i<boardlist.size(); i++) {
+				System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+			}
+			
+			rs.close();
+			pt.close();
+			con.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardlist;
+	}
 }
 
