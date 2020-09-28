@@ -58,7 +58,7 @@
 		String loginid = "";
 		if(session.getAttribute("loginCheck") != null) {
 			loginid = (String) session.getAttribute("loginid");
-			System.out.println(loginid);
+			System.out.printf("loginid: %s",loginid);
 		} else
 			loginid = "notsignedinnull";
 	%>
@@ -219,7 +219,7 @@
 		var likes_status;
 		var total_list = ${fn:length(boardlist)};
  
-		if( !(loginid == "notsignedinnull")) {
+		if( !(loginid == "notsignedinnull")) { // 로그인 되어 있으면, 좋아요 눌렀던 게시물 갖고오기 
 			$.ajax({
 				url : '/healthproject/getlikeddata', 
 				type : 'POST',
@@ -252,7 +252,7 @@
 		
  		$("img.likes_pic").on('click', function(e) {
  		
-			if( !(loginid == "notsignedinnull")) {
+			if( !(loginid == "notsignedinnull")) { // 로그인 되어 있으면
 		
 // 			alert(1);
 				//alert($(e.target).attr('src'));
@@ -288,7 +288,7 @@
 					}
 				}); // add likes _ $.ajax 완료  
 				
-			} else {
+			} else { // 로그인 안되어 있을 때 
 				alert("로그인 먼저 해주세요.");
 				location.href="/healthproject/signin";
 			}

@@ -150,9 +150,12 @@ public class BoardDAO {
 	
 	public ArrayList<BoardVO> getlikedinfo() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
 		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
+
+		String loginid = (String)session.getAttribute("loginid");
+		System.out.printf("(DAO getlikedinfo) session id :%s\n",(String)session.getAttribute("loginid"));
 		
 		try {
-				String sql = "select id, seq from hlikes where id= 'test8' ";
+				String sql = "select id, seq from hlikes where id= ? ";
 //				String sql = "select hl.id as id, hl.seq as seq, hb.likes as likes, " +
 //						"hb.location as location, hb.filepath as filepath, hb.caption as caption " + 
 //						"from hboard hb, hlikes hl " + 
@@ -163,8 +166,7 @@ public class BoardDAO {
 				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
 				PreparedStatement pt = con.prepareStatement(sql);
 				
-//				pt.setString(1, (String)session.getAttribute("loginid"));
-				System.out.printf("(DAO getlikedinfo) session id :%s\n",(String)session.getAttribute("loginid"));
+				pt.setString(1, loginid);
 				
 				ResultSet rs = pt.executeQuery();
 //				System.out.println(rs.next());
@@ -181,10 +183,11 @@ public class BoardDAO {
 					boardlist.add(vo);
 				}
 				
-				System.out.printf("boardlist.size :%d\n", boardlist.size());
-				for(int i=0; i<boardlist.size(); i++) {
-					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
-				}
+				// liked 게시물 정보 표시 
+//				System.out.printf("boardlist.size :%d\n", boardlist.size());
+//				for(int i=0; i<boardlist.size(); i++) {
+//					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+//				}
 				
 				rs.close();
 				pt.close();
