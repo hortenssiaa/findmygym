@@ -217,7 +217,6 @@ public class BoardDAO {
 //				System.out.println(rs.next());
 		
 				while(rs.next()) {
-					//System.out.println("(DAO getBoardDetail) 3");
 					BoardVO vo = new BoardVO();
 					vo.setId(rs.getString("id"));
 					vo.setSeq(rs.getInt("seq"));
