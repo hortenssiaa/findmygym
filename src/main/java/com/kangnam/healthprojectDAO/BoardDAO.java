@@ -61,7 +61,7 @@ public class BoardDAO {
 		System.out.println("\nBoardDAO getBoardDetail() started!!!");
 		
 			try {
-				String sql = "select seq, id, location, filepath, likes, caption from hboard ";
+				String sql = "select seq, id, location, filepath, likes, caption from hboard order by time asc ";
 	
 				Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -78,6 +78,12 @@ public class BoardDAO {
 					vo.setCaption(rs.getString("caption"));
 					boardlist.add(vo);
 				}
+				
+				// 내용 확인 
+//				System.out.printf("(DAO getBoardDetail) boardlist.size :%d\n", boardlist.size());
+//				for(int i=0; i<boardlist.size(); i++) {
+//					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+//				}
 	
 				rs.close();
 				pt.close();
@@ -314,7 +320,7 @@ public class BoardDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				System.out.println("(DAO getMyBookmarkInfo) #3단계");
+//				System.out.println("(DAO getMyBookmarkInfo) #3단계");
 				BoardVO vo = new BoardVO();
 				vo.setId(rs.getString("id"));
 				vo.setSeq(rs.getInt("seq"));
@@ -326,10 +332,10 @@ public class BoardDAO {
 			}
 			
 			 // Bookmarked 게시물 정보 표시 
-				System.out.printf("boardlist.size :%d\n", boardlist.size());
-				for(int i=0; i<boardlist.size(); i++) {
-					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
-				}
+//				System.out.printf("boardlist.size :%d\n", boardlist.size());
+//				for(int i=0; i<boardlist.size(); i++) {
+//					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+//				}
 			
 			rs.close();
 			pt.close();
@@ -361,7 +367,7 @@ public class BoardDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				System.out.println("(DAO getBoardProfile) rs.next 단계");
+//				System.out.println("(DAO getBoardProfile) rs.next 단계");
 				BoardVO vo = new BoardVO();
 				vo.setId(rs.getString("id"));
 				vo.setFilepath(rs.getString("filepath"));
@@ -369,10 +375,10 @@ public class BoardDAO {
 			}
 			
 			// Board list Profile picture 게시물 정보 표시 
-			System.out.printf("(DAO getBoardProfile) boardlist.size :%d\n", boardlist.size());
-			for(int i=0; i<boardlist.size(); i++) {
-				System.out.printf("%d: %s\n\n", i, boardlist.get(i));
-			}
+//			System.out.printf("(DAO getBoardProfile) boardlist.size :%d\n", boardlist.size());
+//			for(int i=0; i<boardlist.size(); i++) {
+//				System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+//			}
 			
 			rs.close();
 			pt.close();
