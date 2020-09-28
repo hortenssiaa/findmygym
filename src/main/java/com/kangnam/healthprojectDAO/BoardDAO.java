@@ -146,6 +146,51 @@ public class BoardDAO {
 		
 		return vo;
 	}
+	
+	public void getBookMark(String bm_status, int seq, String id) { 
+		
+		// bookmark 클릭시 마다 bookmark컬럼 1 증가/감소 해야함! -> update문
+		// getBookMark는 getLikes와 다르게, 수 표시 안해도 되기 때문에, VO받아오지않고 void로 return type 정함
+		// VO 추가 해야한댜면, getLikes() 코드 참고할 것 
+		
+		String sql1="", sql2="";
+		
+		try {
+			if(bm_status.equals("1")) { // book mark
+				sql1 = "update hboard set BOOKMARK = BOOKMARK+1 where seq= ? ";
+				sql2 = "insert into hbookmark values( ?, ? ) ";
+				System.out.println("(/getBookMark) bm_status == 1");
+			} 
+			
+			else if(bm_status.equals("0")) { // non book mark
+				sql1 = "update hboard set BOOKMARK = BOOKMARK-1 where seq= ? ";
+				sql2 = "delete from hbookmark where id= ? and seq= ? ";
+				System.out.println("(/getBookMark) bm_status == 0");
+			} 
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+			PreparedStatement pt1 = con.prepareStatement(sql1);
+			PreparedStatement pt2 = con.prepareStatement(sql2);
+			
+			pt1.setInt(1, seq);
+			pt2.setString(1, id);
+			pt2.setInt(2, seq);
+			
+			// db 전송
+			// update 문 먼저 실행 > select
+			pt1.executeUpdate();
+			pt2.executeUpdate();
+			
+			pt2.close();
+			pt1.close();
+			con.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	
 	public ArrayList<BoardVO> getlikedinfo() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
@@ -172,7 +217,7 @@ public class BoardDAO {
 //				System.out.println(rs.next());
 		
 				while(rs.next()) {
-					System.out.println("(DAO getBoardDetail) 3");
+					//System.out.println("(DAO getBoardDetail) 3");
 					BoardVO vo = new BoardVO();
 					vo.setId(rs.getString("id"));
 					vo.setSeq(rs.getInt("seq"));
@@ -193,6 +238,53 @@ public class BoardDAO {
 				pt.close();
 				con.close();
 	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardlist;
+	}
+
+	public ArrayList<BoardVO> getBookmarkInfo() { // like 클릭시 마다 likes컬럼 1 증가/감소 해야함! -> update문
+		ArrayList<BoardVO> boardlist = new ArrayList<BoardVO>();
+		
+		String loginid = (String)session.getAttribute("loginid");
+		System.out.printf("(DAO getBookmarkInfo) session id :%s\n",(String)session.getAttribute("loginid"));
+		
+		try {
+			String sql = "select id, seq from hbookmark where id= ? ";
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
+			PreparedStatement pt = con.prepareStatement(sql);
+			
+			pt.setString(1, loginid);
+			
+			ResultSet rs = pt.executeQuery();
+			
+			while(rs.next()) {
+				//System.out.println("(DAO getBookmarkInfo) #3단계");
+				BoardVO vo = new BoardVO();
+				vo.setId(rs.getString("id"));
+				vo.setSeq(rs.getInt("seq"));
+//					vo.setLikes(rs.getInt("likes"));
+//					vo.setLocation(rs.getString("location"));
+//					vo.setFilepath(rs.getString("filepath"));
+//					vo.setCaption(rs.getString("caption"));
+				boardlist.add(vo);
+			}
+			
+			// Bookmarked 게시물 정보 표시 
+//				System.out.printf("boardlist.size :%d\n", boardlist.size());
+//				for(int i=0; i<boardlist.size(); i++) {
+//					System.out.printf("%d: %s\n\n", i, boardlist.get(i));
+//				}
+			
+			rs.close();
+			pt.close();
+			con.close();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

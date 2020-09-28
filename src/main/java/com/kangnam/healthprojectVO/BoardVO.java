@@ -8,6 +8,7 @@ public class BoardVO {
 	private int seq;
 	private String location;
     private int likes;
+    private int bookmark;
     private String comments;
     private String caption;
     private String filepath;
@@ -63,11 +64,20 @@ public class BoardVO {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public int getBookmark() {
+		return bookmark;
+	}
+	public void setBookmark(int bookmark) {
+		this.bookmark = bookmark;
+	}
 	
 	@Override
 	public String toString() {
-		return "BoardVO [seq=" + seq + ", location=" + location + ", likes=" + likes + ", comments=" + comments
-				+ ", caption=" + caption + ", filepath=" + filepath + ", file=" + file + ", id=" + id + "]";
+		return "BoardVO [seq=" + seq + ", location=" + location + ", likes=" + likes + ", bookmark=" + bookmark
+				+ ", comments=" + comments + ", caption=" + caption + ", filepath=" + filepath + ", file=" + file
+				+ ", id=" + id + "]";
 	}
+	
+	
 	
 }

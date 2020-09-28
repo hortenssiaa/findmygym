@@ -157,4 +157,49 @@ public class BoardController {
 		
 		return likedlist;
 	}
+
+	@RequestMapping(value = "/getbookmarkdata", method= RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<BoardVO> getBookmarkData // for boardlist.jsp ajax
+	(HttpSession session)
+	{
+		ArrayList<BoardVO> bookmarklist = null;
+		
+		bookmarklist = boarddao.getBookmarkInfo();
+		System.out.println("\n/getBookmarkData getLikes done\n");
+		System.out.printf("bookmarklist.size() : %s\n", bookmarklist.size());
+		
+		for(int i=0; i<bookmarklist.size(); i++) {
+//			likedlist.get(i);
+			bookmarklist.get(i).getId();
+			bookmarklist.get(i).getSeq();
+		}
+		
+		if(bookmarklist == null) {
+			System.out.println("(/getlikeddata) : likedlist is null!!");
+		}
+		
+		return bookmarklist;
+	}
+	
+	@RequestMapping(value = "/bookmarkprocess", method= RequestMethod.POST)
+	@ResponseBody
+	public void bookmarkProcess // for boardlist.jsp ajax
+	(HttpSession session , 
+	@RequestParam(value = "bm_status", required=true) String bm_status, 
+	@RequestParam(value = "seq", required=true) String seq,
+	@RequestParam(value = "id", required=true) String id
+	)
+	{
+		// bookmarkProces는 likes와 다르게, 수 표시 안해도 되기 때문에, VO받아오지않고 void로 return type 정함
+		// VO 추가 해야한댜면, /likeprocess인 getMemberInfo() 코드 참고할 것 
+		
+		System.out.printf("(/bookmarkprocess) bm_status:%s, seq:%s, id:%s\n", bm_status,seq,id);
+		
+		if(bm_status.equals("1") || bm_status.equals("0")) {
+			boarddao.getBookMark(bm_status, Integer.parseInt(seq), id);
+			System.out.println("/bookmarkProcess getBookMark done\n");
+		} 
+		
+	}
 }
