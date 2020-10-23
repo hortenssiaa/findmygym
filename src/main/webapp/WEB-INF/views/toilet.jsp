@@ -198,6 +198,31 @@ body {
   top: 0.55em;
 }
 
+table ,tr td, tr th{
+    border:1px solid $color-form-highlight;
+}
+tbody {
+    display:block;
+    height:500px;
+    overflow:auto;
+}
+
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+
+thead {
+    width: calc( 100% - 1em );/* scrollbar is average 1em/16px width, remove it from thead width */
+    background:#000;
+    color: white;
+} 
+
+table {
+    width:100%;
+}
+
 </style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script>
@@ -234,6 +259,7 @@ body {
 				url : '/healthproject/toilet/city',
 				data : {"cityname": $(".dropdown-city input:checked").val()},
 				type: 'post',
+				
 				dataType: 'json',
 				success: function(town) {
 					$(".dropdown-town").empty();
@@ -241,7 +267,7 @@ body {
 					('<input type="radio" value="지역선택" checked="checked" id="sort_town"> '
 							+'<label for="sort_town">지역을 선택해주세요</label>');
 					
-					for(var i=0;i<town.length;i++){
+					for(var i=0; i<town.length; i++) {
 						var input = '<input type="radio" value="'+town[i]+'" id="'+town[i]+'" > <label for="'+town[i]+'">'+town[i]+'</label>';
 						$(".dropdown-town").append(input);
 					}
@@ -260,22 +286,50 @@ body {
 		}
 		
 		$("#ajaxbtn").on("click", function() {
-			var city= $("#city").children("option:selected").val();
-			var county= $("#county").children("option:selected").val();
-			if(city!="지역을 선택해주세요" && county!="지역을 선택해주세요"){
+			var city = $(".dropdown-city").children("input:checked").val();
+			var town = $(".dropdown-town").children("input:checked").val();
+			
+			if(city != "지역을 선택해주세요" && town != "지역을 선택해주세요") {
 				$.ajax({
-					url : '/animalhospital/hospital/message',
-					data : {'a1': $("#city option:selected").val() ,'a2': $("#county option:selected").val()},
+					url : '/healthproject/toilet/toiletinfo',
+					data : {'townname': $(".dropdown-town input:checked").val()},
 					type: 'post',
+					
 					dataType: 'json',
-					success: function(med) {
+					success: function(details) {
 						$("#tab").empty();
-						for(var i=0;i<med.length;i++){
-							if(med[i].tel.includes("null")){
-								med[i].tel="";
+						var table;
+						
+						for(var i=0; i<details.length; i++) {
+							if(details[i].pt_addr1.includes("null")) {
+								details[i].pt_addr1 = "";
+								
+								table = "<tr> <td class='name'>" + details[i].pt_name 
+								+ "</td><td class='address'>" + details[i].pt_addr2
+								+ "</td><td>" + details[i].pt_tel 
+								+ "</td><td>" + details[i].pt_time 
+								+ "</td><td>" + details[i].pt_m_handi1 
+								+ "</td><td>" + details[i].pt_m_handi2 
+								+ "</td><td>" + details[i].pt_f_handi 
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
 							}
-							var tab="<tr id="+med[i].seq +"><td class='name'>"+med[i].name+"</td><td class='address'>"+med[i].nameAddress+"</td><td>"+med[i].tel+"</td><td class='x' hidden='hidden'>"+med[i].x+"</td><td class='y' hidden='hidden'>"+med[i].y+"</td></tr>";            
-							$("#tab").append(tab);
+
+							else if(details[i].pt_addr2.includes("null")) {
+								details[i].pt_addr2 = "";
+								
+								table = "<tr> <td class='name'>" + details[i].pt_name 
+								+ "</td><td class='address'>" + details[i].pt_addr1
+								+ "</td><td>" + details[i].pt_tel 
+								+ "</td><td>" + details[i].pt_time 
+								+ "</td><td>" + details[i].pt_m_handi1 
+								+ "</td><td>" + details[i].pt_m_handi2 
+								+ "</td><td>" + details[i].pt_f_handi 
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+							}
+							          
+							$("#tab").append(table);
 						}
 						
 						$(".name").mouseover(function(e){

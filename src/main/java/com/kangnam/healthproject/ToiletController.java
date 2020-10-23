@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kangnam.healthprojectDAO.ToiletDAO;
+import com.kangnam.healthprojectVO.ToiletVO;
 
 @Controller
 public class ToiletController {
@@ -30,6 +31,19 @@ public class ToiletController {
 		ArrayList<String> list; 
 		list = toiletdao.searchCity(cityname);
 		System.out.println(list.get(0));
+		return list;
+	}
+	
+	@RequestMapping(value ="/toilet/toiletinfo", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<ToiletVO> message(String townname) {
+		ArrayList<ToiletVO> list; 
+		
+		list = toiletdao.searchAddress(townname);
+		
+		for(ToiletVO toilet: list) {
+			System.out.println(toilet.getPt_name());
+		}
 		return list;
 	}
 }

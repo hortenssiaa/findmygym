@@ -17,8 +17,6 @@ html, body {
 	height: 100%;
 }
 </style>
-<!-- 구글 맵스 API key : AIzaSyA4uccRMzdfK_UI_JFz6gr4KfR-S1G7kAI -->
-<!-- kakao maps JS api key : 2498e2ede14eaeded0134865029cedad  -->
 </head>
 
 <body>
