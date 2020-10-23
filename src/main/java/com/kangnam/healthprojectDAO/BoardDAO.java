@@ -61,6 +61,10 @@ public class BoardDAO {
 		System.out.println("\nBoardDAO getBoardDetail() started!!!");
 		
 			try {
+				
+				// boardlist.jsp table에서 역순으로 보여주고 있기 때문에, sql문에서 ase로 정렬한다.  
+				// 만약, boardlist.jsp table에서 오름차순으로 보여준다면, sql문에서 desc로 정렬하면 된다. 
+				
 				String sql = "select seq, id, location, filepath, likes, caption from hboard order by time asc ";
 	
 				Class.forName("oracle.jdbc.driver.OracleDriver");

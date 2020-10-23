@@ -60,10 +60,10 @@
 </head>
 <body>
 	<h1>
-		Hello world!  
+		Home
 	</h1>
 	
-	<P>  The time on the server is ${serverTime}. </P>
+	<!-- <P>  The time on the server is ${serverTime}. </P> -->
 	
 	<div id="signinform">
 		<jsp:include page="included_memberinfo.jsp"></jsp:include>
