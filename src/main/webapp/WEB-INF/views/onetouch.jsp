@@ -7,7 +7,7 @@
 <title>공원, 산, 강, 화장실 정보</title>
 <style type="text/css">
 html {
-	margin-top: 3%;
+	margin-top: 2%;
 	margin-left: 10%;
 	margin-right: 10%;
 	font-size: 16px;

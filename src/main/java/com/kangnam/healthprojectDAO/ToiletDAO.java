@@ -70,8 +70,8 @@ public class ToiletDAO {
 				vo.setPt_name(rs.getString("pt_name"));
 				vo.setPt_addr1(rs.getString("pt_addr1"));
 				vo.setPt_addr2(rs.getString("pt_addr2"));
-				vo.setPt_m_handi1(rs.getString("pt_m_handi1"));
-				vo.setPt_m_handi2(rs.getString("pt_m_handi2"));
+				vo.setPt_m_handi1(rs.getInt("pt_m_handi1"));
+				vo.setPt_m_handi2(rs.getInt("pt_m_handi2"));
 				vo.setPt_f_handi(rs.getString("pt_f_handi"));
 				vo.setPt_tel(rs.getString("pt_tel"));
 				vo.setPt_time(rs.getString("pt_time"));
