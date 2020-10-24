@@ -2,7 +2,7 @@ package com.kangnam.healthprojectVO;
 
 public class ToiletVO {
 	String pt_city, pt_kind, pt_name, pt_addr1, pt_addr2;
-	int pt_m_handi1, pt_m_handi2, pt_f_handi;
+	String pt_m_handi1, pt_m_handi2, pt_f_handi;
 	String pt_tel, pt_time, pt_lat, pt_lng;
 	
 	public String getPt_city() {
@@ -45,27 +45,27 @@ public class ToiletVO {
 		this.pt_addr2 = pt_addr2;
 	}
 	
-	public int getPt_m_handi1() {
+	public String getPt_m_handi1() {
 		return pt_m_handi1;
 	}
 	
-	public void setPt_m_handi1(int pt_m_handi1) {
+	public void setPt_m_handi1(String pt_m_handi1) {
 		this.pt_m_handi1 = pt_m_handi1;
 	}
 	
-	public int getPt_m_handi2() {
+	public String getPt_m_handi2() {
 		return pt_m_handi2;
 	}
 	
-	public void setPt_m_handi2(int pt_m_handi2) {
+	public void setPt_m_handi2(String pt_m_handi2) {
 		this.pt_m_handi2 = pt_m_handi2;
 	}
 	
-	public int getPt_f_handi() {
+	public String getPt_f_handi() {
 		return pt_f_handi;
 	}
 	
-	public void setPt_f_handi(int pt_f_handi) {
+	public void setPt_f_handi(String pt_f_handi) {
 		this.pt_f_handi = pt_f_handi;
 	}
 	

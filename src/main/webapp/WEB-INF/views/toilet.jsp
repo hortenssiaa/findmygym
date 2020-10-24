@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>공중화장실 정보</title>
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
 /* .option {
 	margin-top: 5px;
 } */
@@ -199,40 +200,267 @@ body {
 }
 
 table ,tr td, tr th{
+	margin-top: 5px;
     border:1px solid $color-form-highlight;
 }
 tbody {
     display:block;
     height:500px;
     overflow:auto;
+    color: black;
 }
 
 thead, tbody tr {
     display:table;
     width:100%;
-    table-layout:fixed;/* even columns width , fix width of table too*/
+    table-layout:fixed;
+    /* even columns width , fix width of table too */
 }
 
 thead {
-    width: calc( 100% - 1em );/* scrollbar is average 1em/16px width, remove it from thead width */
-    background:#000;
+    width: calc( 100% - 1em );
+    /* scrollbar is average 1em/16px width, remove it from thead width */
+    background:#3694D8;
     color: white;
 } 
 
 table {
     width:100%;
-}
+} 
+
 
 </style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script>
 	$(document).ready(function() {
+		
+		// sorted city 
+		$('.dropdown-city').click(function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).toggleClass('expanded');
+			$('#'+$(e.target).attr('for')).prop('checked',true);
+			//alert($('#'+$(e.target).attr('for')).val());
+		
+			var city = $(".dropdown-city").children("input:checked").val();
+			//alert("city:"+city);
+			
+			if(city != "지역을 선택해주세요") {
+				$.ajax({
+					url : '/healthproject/toilet/city',
+					data : {"cityname": $(".dropdown-city input:checked").val()},
+					type: 'post',
+					
+					dataType: 'json',
+					success: function(town) {
+						$(".dropdown-town").empty();
+						$(".dropdown-town").append
+						('<input type="radio" value="지역을 선택해주세요" id="sort_town"> '
+								+'<label for="sort_town">지역을 선택해주세요</label>');
+						
+						var townArr = new Array();
+						for(var i=0; i<town.length; i++) {
+							townArr[i] = town[i];
+							var input = '<input type="radio" value="' + town[i] + '" id="'+i+
+										'" name="sortType2" > <label for="'+i+'">'+town[i]+'</label>';
+							$(".dropdown-town").append(input);
+						}
+						
+						$('.dropdown-town').click(function(e) {
+							e.preventDefault();
+							e.stopPropagation();
+							$(this).toggleClass('expanded');
+							$('#'+$(e.target).attr('for')).prop('checked',true);
+							
+							//alert($('#'+$(e.target).attr('for')).val());
+							//alert($('#'+$(e.target).id));
+							
+							//var checkedTown = $(".dropdown-town").children("input:checked").val();
+							//alert("town2:"+town2);
+						}); 
+
+						$(document).click(function() { // 해당 태그 이외의 부분에 click 발생시; expanded 닫아라. 
+							$('.dropdown-town').removeClass('expanded');
+						});
+						
+					},
+					error: function(request,status,error) {
+						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					}
+					
+				});
+			}
+			
+			else {
+				$(".dropdown-town").empty();
+				$(".dropdown-town").append
+				('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
+						+'<label for="sort_town">지역을 선택해주세요</label>');
+			}
+		});
+		
+		$(document).click(function() {
+			$('.dropdown-city').removeClass('expanded');
+		});
+
+		/* $('.dropdown-town').click(function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).toggleClass('expanded');
+		}); */
+		
+		
+		
+		
+		$("#ajaxbtn").on("click", function() {
+			var city = $(".dropdown-city").children("input:checked").val();
+			var town = $(".dropdown-town").children("input:checked").val();
+			//alert("city:"+city);
+			//alert("town:"+town);
+			
+			if(city != "지역을 선택해주세요" && town != "지역을 선택해주세요") {
+				$.ajax({
+					url : '/healthproject/toilet/toiletinfo',
+					data : {'townname': $(".dropdown-town input:checked").val()},
+					type: 'post',
+					
+					dataType: 'json',
+					success: function(details) {
+						$("#tab").empty();
+						
+						for(var i=0; i<details.length; i++) {
+						var table;
+							if(details[i].pt_addr1.includes("null")) {
+								/* details[i].pt_addr1 = "";
+
+								
+								if(details[i].pt_m_handi1.includes("0"))
+									details[i].pt_m_handi1 = "없음";
+								else
+									details[i].pt_m_handi1 = "있음";
+								
+								if(details[i].pt_m_handi2.includes("0")) 
+									details[i].pt_m_handi2 = "없음";
+								else
+									details[i].pt_m_handi2 = "있음";
+								
+								if(details[i].pt_f_handi.includes("0"))
+									details[i].pt_f_handi = "없음";
+								else
+									details[i].pt_f_handi = "있음"; */
+								
+
+								table = "<tr id=" + i +"> <td class='name'>" + details[i].pt_name 
+								+ "</td><td class='address'>" + details[i].pt_addr2
+								+ "</td><td>" + details[i].pt_tel 
+								+ "</td><td>" + details[i].pt_time 
+								+ "</td><td>" + details[i].pt_m_handi1 
+								+ "</td><td>" + details[i].pt_m_handi2 
+								+ "</td><td>" + details[i].pt_f_handi 
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+							}
+
+							else if(details[i].pt_addr2.includes("null")) {
+								/* details[i].pt_addr2 = "";
+								
+								if(details[i].pt_m_handi1.includes("0"))
+									details[i].pt_m_handi1 = "없음";
+								else
+									details[i].pt_m_handi1 = "있음";
+								
+								if(details[i].pt_m_handi2.includes("0")) 
+									details[i].pt_m_handi2 = "없음";
+								else
+									details[i].pt_m_handi2 = "있음";
+								
+								if(details[i].pt_f_handi.includes("0"))
+									details[i].pt_f_handi = "없음";
+								else
+									details[i].pt_f_handi = "있음"; */
+								
+								table = "<tr id=" + i +"> <td class='name'>" + details[i].pt_name 
+								+ "</td><td class='address'>" + details[i].pt_addr1
+								+ "</td><td>" + details[i].pt_tel 
+								+ "</td><td>" + details[i].pt_time 
+								+ "</td><td>" + details[i].pt_m_handi1 
+								+ "</td><td>" + details[i].pt_m_handi2 
+								+ "</td><td>" + details[i].pt_f_handi 
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+							}
+							          
+							$("#tab").append(table);
+						}
+						
+						$(".name").mouseover(function(e){
+							  $(e.target).css("text-decoration", "underline");
+						});
+						
+						$(".name").mouseleave(function(e){
+							$(e.target).css("text-decoration", "none");
+						});
+						
+						$(".address").mouseover(function(e){
+							$(e.target).css("text-decoration", "underline");
+						});
+		
+						$(".address").mouseleave(function(e){
+							$(e.target).css("text-decoration", "none");
+						});
+					}
+				});
+			}
+		});	//on
+		
+		$(".dropdown-city").change(function() {
+			//alert($('#'+$(e.target).attr('for')).val());
+			alert("change1");
+			
+			var city = $(".dropdown-city").children("input:checked").val();
+			
+			if(city != "지역을 선택해주세요") {
+				
+				$.ajax({
+					url : '/healthproject/toilet/city',
+					data : {"cityname": $(".dropdown-city input:checked").val()},
+					type: 'post',
+					
+					dataType: 'json',
+					success: function(town) {
+						$(".dropdown-town").empty();
+						$(".dropdown-town").append
+						('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
+								+'<label for="sort_town">지역을 선택해주세요</label>');
+						
+						for(var i=0; i<town.length; i++) {
+							var input = '<input type="radio" value="'+town[i]+'" id="'+town[i]
+								+'" name="sortType2" > <label for="'+town[i]+'">'+town[i]+'</label>';
+							$(".dropdown-town").append(input);
+						}
+					},
+					error: function(request,status,error) {
+						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					}
+				});
+			}else{
+				$(".dropdown-town").empty();
+				$(".dropdown-town").append
+				('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
+						+'<label for="sort_town">지역을 선택해주세요</label>');
+			}
+		});//change
+	});
+	
+/* 	$(document).ready(function() {
 		// css 
 		$('.dropdown-city').click(function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			$(this).toggleClass('expanded');
 			$('#'+$(e.target).attr('for')).prop('checked',true);
+			
+			alert($('#'+$(e.target).attr('for')).val());
 		});
 		
 		$(document).click(function() {
@@ -264,11 +492,12 @@ table {
 				success: function(town) {
 					$(".dropdown-town").empty();
 					$(".dropdown-town").append
-					('<input type="radio" value="지역선택" checked="checked" id="sort_town"> '
+					('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
 							+'<label for="sort_town">지역을 선택해주세요</label>');
 					
 					for(var i=0; i<town.length; i++) {
 						var input = '<input type="radio" value="'+town[i]+'" id="'+town[i]+'" > <label for="'+town[i]+'">'+town[i]+'</label>';
+						alert("1: "+input);
 						$(".dropdown-town").append(input);
 					}
 				},
@@ -279,13 +508,15 @@ table {
 		}
 		
 		else{
+			alert("else1");
+			
 			$(".dropdown-town").empty();
 			$(".dropdown-town").append
-			('<input type="radio" value="지역선택" checked="checked" id="sort_town"> '
+			('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
 					+'<label for="sort_town">지역을 선택해주세요</label>');
 		}
 		
-		$("#ajaxbtn").on("click", function() {
+		$("#ajaxbtn").on("click", function(e) {
 			var city = $(".dropdown-city").children("input:checked").val();
 			var town = $(".dropdown-town").children("input:checked").val();
 			
@@ -352,39 +583,56 @@ table {
 			}
 		});	//on
 		
-		$("#city").change(function() {
-			var city= $("#city").children("option:selected").val();
-			if(city!="지역을 선택해주세요"){
+		$(".dropdown-city").change(function(e) {
+			alert($('#'+$(e.target).attr('for')).val());
+		alert(2);
+			var city = $(".dropdown-city").children("input:checked").val();
+			alert("change1");
+			
+			if(city != "지역을 선택해주세요") {
+				
 				$.ajax({
-					url : '/animalhospital/hospital/county',
-					data : {"a1": $("#city option:selected").val()},
+					url : '/healthproject/toilet/city',
+					data : {"cityname": $(".dropdown-city input:checked").val()},
 					type: 'post',
+					
 					dataType: 'json',
-					success: function(county) {
-						$("#county").empty();
-						$("#county").append("<option value=\"지역을 선택해주세요\" selected=\"selected\">지역을 선택해주세요</option>");
-						for(var i=0;i<county.length;i++){
-							var option="<option value=\""+county[i]+"\">"+county[i]+"</option>"
-							$("#county").append(option);
+					success: function(town) {
+						alert("town: "+town);
+						alert("town.length: "+town.length);
+						$(".dropdown-town").empty();
+						$(".dropdown-town").append
+						('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
+								+'<label for="sort_town">지역을 선택해주세요</label>');
+						
+						for(var i=0; i<town.length; i++) {
+							var input = '<input type="radio" value="'+town[i]+'" id="'+town[i]+'" > <label for="'+town[i]+'">'+town[i]+'</label>';
+							alert("2: "+input);
+							$(".dropdown-town").append(input);
 						}
 					},
 					error: function(request,status,error) {
+						alert(1);
 						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 					}
 				});
 			}else{
-				$("#county").empty();
-				$("#county").append("<option value=\"지역을 선택해주세요\" selected=\"selected\">지역을 선택해주세요</option>");
+				alert("else2");
+				
+				$(".dropdown-town").empty();
+				$(".dropdown-town").append
+				('<input type="radio" value="지역을 선택해주세요" checked="checked" id="sort_town"> '
+						+'<label for="sort_town">지역을 선택해주세요</label>');
 			}
 		});//change
-	});
+	}); */
 </script>
 </head>
 <body>
 	장소 이름, 주소를 클릭하면 지도가 보입니다.
 	<br>
 	<span class="dropdown-city"> 
-		<input type="radio" name="sortType" value="지역선택" checked="checked" id="sort_city">
+		<input type="radio" name="sortType" value="지역을 선택해주세요" checked="checked" id="sort_city">
 		<label for="sort_city">지역을 선택해주세요</label> 
 		
 		<input type="radio" name="sortType" value="서울특별시" id="seoul">
@@ -437,7 +685,7 @@ table {
 	</span>
 	
 	<span class="dropdown-town"> 
-		<input type="radio" name="sortType2" value="지역선택" checked="checked" id="sort_town">
+		<input type="radio" name="sortType2" value="지역을 선택해주세요" checked="checked" id="sort_town">
 		<label for="sort_town">지역을 선택해주세요</label> 
 	</span>	
 	
@@ -447,11 +695,15 @@ table {
 		<table>
 			<thead>
 				<tr>
-					<th>병원명</th>
+					<th>장소명</th>
 					<th>주소</th>
 					<th>전화번호</th>
-					<th id='x' hidden='hidden'></th>
-					<th id='y' hidden='hidden'></th>
+					<th>이용가능시간</th>
+					<th>장애인화장실1(남)</th>
+					<th>장애인화장실2(남)</th>
+					<th>장애인화장실(여)</th>
+					<th id='lat' hidden='hidden'></th>
+					<th id='lng' hidden='hidden'></th>
 				</tr>
 			</thead>
 			<tbody id="tab">
