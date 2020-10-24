@@ -28,11 +28,11 @@ public class ToiletController {
 	@RequestMapping(value ="/toilet/city", method = RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ArrayList<String> getTown(String cityname) {
-		System.out.println("Hello here's ToiletController getTown()");
+//		System.out.println("Hello here's ToiletController getTown()");
 		ArrayList<String> list; 
 		
 		list = toiletdao.searchTown(cityname);
-		System.out.println(list.get(0));
+//		System.out.println(list.get(0));
 		
 		return list;
 	}
@@ -40,13 +40,13 @@ public class ToiletController {
 	@RequestMapping(value ="/toilet/toiletinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<ToiletVO> getToiletInfo(String townname) {
-		System.out.println("Hello here's ToiletController getToiletInfo()");
-		System.out.printf("town:%s\n",townname);
+//		System.out.println("Hello here's ToiletController getToiletInfo()");
+//		System.out.printf("town:%s\n",townname);
 		
 		ArrayList<ToiletVO> list; 
 		
 		list = toiletdao.searchAddress(townname);
-		System.out.println(list.get(0));
+//		System.out.println(list.get(0));
 		
 //		for(ToiletVO toilet: list) {
 //			System.out.println(toilet.getPt_name());

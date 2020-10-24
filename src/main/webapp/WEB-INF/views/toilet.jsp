@@ -7,10 +7,8 @@
 <title>공중화장실 정보</title>
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
-/* .option {
-	margin-top: 5px;
-} */
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 body {
   align-items: center;    
   text-align: center;
@@ -20,7 +18,13 @@ body {
   padding: 0;
   border-bottom: 3vh solid #3694d7;
   font-family: "Myriad Pro", "Arial", sans;
+  font-family: 'Nanum Gothic', sans-serif;
   font-size: 16px;
+}
+
+#map {
+	width: 100%;
+	height: 100%;
 }
 
 .dropdown-city {
@@ -222,7 +226,7 @@ thead, tbody tr {
 thead {
     width: calc( 100% - 1em );
     /* scrollbar is average 1em/16px width, remove it from thead width */
-    background:#3694D8;
+    background:#56BCB7;
     color: white;
 } 
 
@@ -534,6 +538,9 @@ table {
 			</tbody>
 		</table>
 	</div>
+	
+	<jsp:include page="maps.jsp"/>
+	<!-- <div id="mapresult" style="width: 100%; height: 100%;"></div> -->
 	
 </body>
 </html>

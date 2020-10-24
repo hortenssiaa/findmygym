@@ -6,11 +6,14 @@
 <meta charset="UTF-8">
 <title>공원, 산, 강, 화장실 정보</title>
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 html {
 	margin-top: 2%;
 	margin-left: 10%;
 	margin-right: 10%;
 	font-size: 16px;
+	font-family: 'Nanum Gothic', sans-serif;
 }
 
 ul {
@@ -18,7 +21,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #ffb300;
+    background-color: #E2535C;
 }
 
 li {
@@ -32,7 +35,7 @@ li {
 
 /* Change the link color to #111 (black) on hover */
 li:hover {
-    background-color: #c68400;
+    background-color: #56BCB7;
 }
 
 #show_here {
