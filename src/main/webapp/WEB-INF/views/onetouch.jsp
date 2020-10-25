@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공원, 산, 강, 화장실 정보</title>
+<title>원터치 정보</title>
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
@@ -46,22 +46,23 @@ li:hover {
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		$('#toilet').on('click', function() {
-			$("#show_here").load("/healthproject/toilet");
+		$(document).on("click", "#toilet", function(){
+			//$("#show_here").load("/healthproject/toilet");
+			location.href="/healthproject/toilet"
 		});
-
-		$('#park').on('click', function() {
-			$("#show_here").load("/healthproject/park");
+		$(document).on("click", "#park", function(){
+			//$("#show_here").load("/healthproject/park");
+			location.href="/healthproject/park"
 		});
-		
-		$('#river').on('click', function() {
-			$("#show_here").load("/healthproject/river");
+		$(document).on("click", "#river", function(){
+			//$("#show_here").load("/healthproject/river");
+			location.href="/healthproject/river"
 		});
-	});
+	}); 
 </script>
 </head>
 <body>
-	<ul>
+	<ul class='navibar'>
 		<li id='park'>공원</li>
 		<li id='river'>강/탄천</li>
 		<li id='toilet'>공중 화장실</li>
@@ -70,8 +71,8 @@ li:hover {
 		<li id='mount'>산</li>
 	</ul>
 	
-	<div id="show_here">
+	<!-- <div id="show_here">
 		카테고리를 클릭하면 이곳에 결과가 보여집니다. 
-	</div>
+	</div> -->
 </body>
 </html>

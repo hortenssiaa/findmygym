@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +25,7 @@ body {
 
 #map {
 	width: 100%;
-	height: 100%;
+	height: 92%;
 }
 
 .dropdown-city {
@@ -33,6 +34,7 @@ body {
   position: relative;
   display: inline-block;
   margin-right: 1em;
+  margin-left: 7em;
   min-height: 2em;
   max-height: 2em;
   overflow: hidden;
@@ -457,8 +459,10 @@ table {
 </script>
 </head>
 <body>
+	<jsp:include page="onetouch.jsp"/>
+	
 	장소 이름, 주소를 클릭하면 지도가 보입니다.
-	<br>
+	
 	<span class="dropdown-city"> 
 		<input type="radio" name="sortType" value="지역을 선택해주세요" checked="checked" id="sort_city">
 		<label for="sort_city">지역을 선택해주세요</label> 
@@ -540,7 +544,5 @@ table {
 	</div>
 	
 	<jsp:include page="maps.jsp"/>
-	<!-- <div id="mapresult" style="width: 100%; height: 100%;"></div> -->
-	
 </body>
 </html>
