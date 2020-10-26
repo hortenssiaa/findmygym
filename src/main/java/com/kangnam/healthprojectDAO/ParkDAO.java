@@ -8,18 +8,18 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.kangnam.healthprojectVO.ToiletVO;
+import com.kangnam.healthprojectVO.ParkVO;
 
-@Component("toiletdao")
-public class ToiletDAO {
+@Component("parkdao")
+public class ParkDAO {
 
 	public ArrayList<String> searchTown(String city) {
-		ArrayList<String> list = new ArrayList<String>(); 
+ArrayList<String> list = new ArrayList<String>(); 
 		
 		try {
-			String sql = "select distinct pt_city from toilet " +
-						"where pt_city like '%' || ? || '%' " + 
-						"order by pt_city ";
+			String sql = "select distinct pk_city from park " +
+						"where pk_city like '%' || ? || '%' " + 
+						"order by pk_city ";
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -31,7 +31,7 @@ public class ToiletDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				String towns = rs.getString("pt_city");
+				String towns = rs.getString("pk_city");
 				list.add(towns);
 			}
 			
@@ -46,13 +46,13 @@ public class ToiletDAO {
 		return list;
 	}
 
-	public ArrayList<ToiletVO> searchDetails(String town) {
-		ArrayList<ToiletVO> list = new ArrayList<ToiletVO>(); 
+	public ArrayList<ParkVO> searchDetails(String town) {
+		ArrayList<ParkVO> list = new ArrayList<ParkVO>(); 
 		
 		try {
-			String sql = "select pt_city, pt_kind, pt_name, pt_addr1, pt_addr2, pt_m_handi1, pt_m_handi2, "
-					+ "pt_f_handi, pt_tel, pt_time, pt_lat, pt_lng "
-					+ "from toilet where pt_city = ? ";
+			String sql = "select pk_city, pk_name, pk_kind, pk_addr, "
+					+ "pk_tel, pk_lat, pk_lng, etc1, etc2, etc3, etc4  "
+					+ "from park where pk_city = ? ";
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -64,19 +64,18 @@ public class ToiletDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				ToiletVO vo = new ToiletVO();
-				vo.setPt_city(rs.getString("pt_city"));
-				vo.setPt_kind(rs.getString("pt_kind"));
-				vo.setPt_name(rs.getString("pt_name"));
-				vo.setPt_addr1(rs.getString("pt_addr1"));
-				vo.setPt_addr2(rs.getString("pt_addr2"));
-				vo.setPt_m_handi1(rs.getInt("pt_m_handi1"));
-				vo.setPt_m_handi2(rs.getInt("pt_m_handi2"));
-				vo.setPt_f_handi(rs.getString("pt_f_handi"));
-				vo.setPt_tel(rs.getString("pt_tel"));
-				vo.setPt_time(rs.getString("pt_time"));
-				vo.setPt_lat(rs.getString("pt_lat"));
-				vo.setPt_lng(rs.getString("pt_lng"));
+				ParkVO vo = new ParkVO();
+				vo.setPk_city(rs.getString("pk_city"));
+				vo.setPk_name(rs.getString("pk_name"));
+				vo.setPk_kind(rs.getString("pk_kind"));
+				vo.setPk_addr(rs.getString("pk_addr"));
+				vo.setPk_tel(rs.getString("pk_tel"));
+				vo.setPk_lat(rs.getString("pk_lat"));
+				vo.setPk_lng(rs.getString("pk_lng"));
+				vo.setEtc1(rs.getString("etc1"));
+				vo.setEtc2(rs.getString("etc2"));
+				vo.setEtc3(rs.getString("etc3"));
+				vo.setEtc4(rs.getString("etc4"));
 				list.add(vo);
 			}
 			
@@ -90,5 +89,5 @@ public class ToiletDAO {
 		
 		return list;
 	}
-
+	
 }

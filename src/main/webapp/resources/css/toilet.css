@@ -258,14 +258,6 @@ table {
 	width: 100%;
 }
 
-.name {
-	width: 30%;
-}
-
-.address {
-	width: 30%;
-}
-
 #ajaxbtn {
 	margin-top: 3vh;
 	position: relative;

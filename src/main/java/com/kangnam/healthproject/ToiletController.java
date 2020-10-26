@@ -45,7 +45,7 @@ public class ToiletController {
 		
 		ArrayList<ToiletVO> list; 
 		
-		list = toiletdao.searchAddress(townname);
+		list = toiletdao.searchDetails(townname);
 //		System.out.println(list.get(0));
 		
 //		for(ToiletVO toilet: list) {

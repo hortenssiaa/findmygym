@@ -40,23 +40,28 @@ li:hover {
     background-color: #56BCB7;
 }
 
-#show_here {
+/* #show_here {
 	margin-top: 10px;
-}
+} */
 </style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
-
 	$(document).ready(function() {
 		$(document).on("click", "#toilet", function(){
-			//$("#show_here").load("/healthproject/toilet");
 			location.href="/healthproject/toilet"
+			//$("#show_here").load("/healthproject/toilet");
 		});
 		$(document).on("click", "#park", function(){
+			$("#park").click(function(e){
+				$(e.target).css("text-decoration", "underline");
+			});
 			//$("#show_here").load("/healthproject/park");
 			location.href="/healthproject/park"
 		});
 		$(document).on("click", "#river", function(){
+			$("#river").click(function(e){
+				$(e.target).css("text-decoration", "underline");
+			});
 			//$("#show_here").load("/healthproject/river");
 			location.href="/healthproject/river"
 		});

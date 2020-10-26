@@ -15,14 +15,6 @@ public class OneTouchController {
 		return "/onetouch";
 	}
 	
-	@RequestMapping(value = "/park", method = RequestMethod.GET)
-	@ResponseBody
-	public ModelAndView getPark() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/park");
-		return mv;
-	}
-	
 	@RequestMapping(value = "/river", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView getRiver() {

@@ -7,10 +7,22 @@
 <meta charset="UTF-8">
 <title>공중화장실 정보</title>
 <link rel="stylesheet" href="./resources/css/toilet.css" type="text/css">
+<style type="text/css">
+	#toilet { /* 페이지 별로 변경! */
+		background-color: #56BCB7;
+	}
+	
+	.name {
+		width: 30%;
+	}
+	
+	.address {
+		width: 30%;
+	}
+</style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
 <script>
 	$(document).ready(function() {
-		
 		// sorted city 
 		$('.dropdown-city').click(function(e) {
 			e.preventDefault();
@@ -296,7 +308,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th class='name'>장소명</th>
+					<th class='name'>화장실명</th>
 					<th class='address'>주소</th>
 					<th>전화번호</th>
 					<th>이용가능시간</th>
