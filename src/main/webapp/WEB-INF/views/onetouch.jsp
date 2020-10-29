@@ -52,18 +52,16 @@ li:hover {
 			//$("#show_here").load("/healthproject/toilet");
 		});
 		$(document).on("click", "#park", function(){
-			$("#park").click(function(e){
-				$(e.target).css("text-decoration", "underline");
-			});
 			//$("#show_here").load("/healthproject/park");
 			location.href="/healthproject/park"
 		});
 		$(document).on("click", "#river", function(){
-			$("#river").click(function(e){
-				$(e.target).css("text-decoration", "underline");
-			});
 			//$("#show_here").load("/healthproject/river");
 			location.href="/healthproject/river"
+		});
+		$(document).on("click", "#workout", function(){
+			//$("#show_here").load("/healthproject/river");
+			location.href="/healthproject/workout"
 		});
 	}); 
 </script>
@@ -73,7 +71,7 @@ li:hover {
 		<li id='park'>공원</li>
 		<li id='river'>강/탄천</li>
 		<li id='toilet'>공중 화장실</li>
-		<li id='fitness'>공공 운동기구</li>
+		<li id='workout'>공공 운동기구</li>
 		<li id='bicycle'>자전거</li>
 		<li id='mount'>산</li>
 	</ul>

@@ -9,43 +9,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kangnam.healthprojectDAO.ParkDAO;
-import com.kangnam.healthprojectVO.ParkVO;
+import com.kangnam.healthprojectDAO.WorkoutDAO;
+import com.kangnam.healthprojectVO.WorkoutVO;
 
 @Controller
-public class ParkController {
+public class WorkoutController {
 	@Autowired
-	ParkDAO parkdao;
-	
-	@RequestMapping(value = "/park", method = RequestMethod.GET)
+	WorkoutDAO workoutdao;
+
+	@RequestMapping(value = "/workout", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView getPark() {
+	public ModelAndView getWorkout() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/park");
+		mv.setViewName("/workout");
 		return mv;
 	}
 	
-	@RequestMapping(value ="/park/city", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+	@RequestMapping(value ="/workout/city", method = RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ArrayList<String> getTown(String cityname) {
 //		System.out.println("Hello here's ParkController getTown()");
 		ArrayList<String> list; 
 		
-		list = parkdao.searchTown(cityname);
+		list = workoutdao.searchTown(cityname);
 //		System.out.println(list.get(0));
 		
 		return list;
 	}
 	
-	@RequestMapping(value ="/park/parkinfo", method = RequestMethod.POST)
+	@RequestMapping(value ="/workout/workoutinfo", method = RequestMethod.POST)
 	@ResponseBody
-	public ArrayList<ParkVO> getParkInfo(String townname) {
+	public ArrayList<WorkoutVO> getWorkoutInfo(String townname) {
 //		System.out.println("Hello here's ParkController getToiletInfo()");
 //		System.out.printf("town:%s\n",townname);
 		
-		ArrayList<ParkVO> list; 
+		ArrayList<WorkoutVO> list; 
 		
-		list = parkdao.searchDetails(townname);
+		list = workoutdao.searchDetails(townname);
 //		System.out.println(list.get(0));
 		
 //		for(ToiletVO toilet: list) {
