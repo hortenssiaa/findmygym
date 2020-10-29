@@ -15,11 +15,4 @@ public class OneTouchController {
 		return "/onetouch";
 	}
 	
-	@RequestMapping(value = "/river", method = RequestMethod.GET)
-	@ResponseBody
-	public ModelAndView getRiver() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/river");
-		return mv;
-	}
 }

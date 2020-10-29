@@ -68,10 +68,10 @@ li:hover {
 </head>
 <body>
 	<ul class='navibar'>
+		<li id='workout'>야외운동기구</li>
 		<li id='park'>공원</li>
 		<li id='river'>강/탄천</li>
 		<li id='toilet'>공중 화장실</li>
-		<li id='workout'>공공 운동기구</li>
 		<li id='bicycle'>자전거</li>
 		<li id='mount'>산</li>
 	</ul>

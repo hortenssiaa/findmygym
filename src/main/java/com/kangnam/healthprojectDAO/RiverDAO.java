@@ -8,18 +8,18 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import com.kangnam.healthprojectVO.WorkoutVO;
+import com.kangnam.healthprojectVO.RiverVO;
 
-@Component("workoutdao")
-public class WorkoutDAO {
-
+@Component("riverdao")
+public class RiverDAO {
+	
 	public ArrayList<String> searchTown(String city) {
 		ArrayList<String> list = new ArrayList<String>(); 
 		
 		try {
-			String sql = "select distinct wo_town from workout " +
-						"where wo_city like '%' || ? || '%' " + 
-						"order by wo_town ";
+			String sql = "select distinct r_town from river " +
+						"where r_city like '%' || ? || '%' " + 
+						"order by r_town ";
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -31,7 +31,7 @@ public class WorkoutDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				String towns = rs.getString("wo_town");
+				String towns = rs.getString("r_town");
 				list.add(towns);
 			}
 			
@@ -46,13 +46,13 @@ public class WorkoutDAO {
 		return list;
 	}
 
-	public ArrayList<WorkoutVO> searchDetails(String town) {
-		ArrayList<WorkoutVO> list = new ArrayList<WorkoutVO>(); 
+	public ArrayList<RiverVO> searchDetails(String town) {
+		ArrayList<RiverVO> list = new ArrayList<RiverVO>(); 
 		
 		try {
-			String sql = "select wo_name, wo_addr, wo_kind, "
-					+ "wo_lat, wo_lng, wo_admin "
-					+ "from workout where wo_town = ? ";
+			String sql = "select r_name, r_addr, r_tel, "
+					+ "r_lat, r_lng, r_park, r_baby, r_pet "
+					+ "from river where r_town = ? ";
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
@@ -64,13 +64,15 @@ public class WorkoutDAO {
 			ResultSet rs = pt.executeQuery();
 			
 			while(rs.next()) {
-				WorkoutVO vo = new WorkoutVO();
-				vo.setWo_name(rs.getString("wo_name"));
-				vo.setWo_addr(rs.getString("wo_addr"));
-				vo.setWo_kind(rs.getString("wo_kind"));
-				vo.setWo_lat(rs.getString("wo_lat"));
-				vo.setWo_lng(rs.getString("wo_lng"));
-				vo.setWo_admin(rs.getString("wo_admin"));
+				RiverVO vo = new RiverVO();
+				vo.setR_name(rs.getString("r_name"));
+				vo.setR_addr(rs.getString("r_addr"));
+				vo.setR_tel(rs.getString("r_tel"));
+				vo.setR_lat(rs.getString("r_lat"));
+				vo.setR_lng(rs.getString("r_lng"));
+				vo.setR_park(rs.getString("r_park"));
+				vo.setR_baby(rs.getString("r_baby"));
+				vo.setR_pet(rs.getString("r_pet"));
 				list.add(vo);
 			}
 			
@@ -84,6 +86,4 @@ public class WorkoutDAO {
 		
 		return list;
 	}
-
-	
 }

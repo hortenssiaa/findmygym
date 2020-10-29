@@ -114,12 +114,6 @@
 
 							if(details[i].wo_admin == null)
 								details[i].wo_admin = "";
-							
-							if(details[i].wo_lat == null)
-								details[i].wo_lat = "";
-
-							if(details[i].wo_lng == null)
-								details[i].wo_lng = "";
 
 							table = "<tr id=" + i +"> <td class='name'>" + details[i].wo_name 
 							+ "</td><td class='address'>" + details[i].wo_addr
@@ -148,6 +142,8 @@
 						});
 					}
 				});
+			} else {
+				alert("지역을 선택해주세요");
 			}
 		});	//on
 		
@@ -193,7 +189,7 @@
 <body>
 	<jsp:include page="onetouch.jsp"/>
 	
-	장소 이름, 주소를 클릭하면 지도가 보입니다.
+	야외운동기구 위치명, 주소를 클릭하면 지도가 보입니다.
 	
 	<span class="dropdown-city"> 
 		<input type="radio" name="sortType" value="지역을 선택해주세요" checked="checked" id="sort_city">

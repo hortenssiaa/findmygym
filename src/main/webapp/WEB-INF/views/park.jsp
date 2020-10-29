@@ -150,6 +150,8 @@
 						});
 					}
 				});
+			} else {
+				alert("지역을 선택해주세요");
 			}
 		});	//on
 		
@@ -195,7 +197,7 @@
 <body>
 	<jsp:include page="onetouch.jsp"/>
 	
-	장소 이름, 주소를 클릭하면 지도가 보입니다.
+	공원명, 주소를 클릭하면 지도가 보입니다.
 	
 	<span class="dropdown-city"> 
 		<input type="radio" name="sortType" value="지역을 선택해주세요" checked="checked" id="sort_city">
@@ -215,6 +217,9 @@
 		
 		<input type="radio" name="sortType" value="광주광역시" id="gwangju">
 		<label for="gwangju">광주광역시</label>
+		
+		<input type="radio" name="sortType" value="울산광역시" id="ulsan">
+		<label for="ulsan">울산광역시</label>
 		
 		<input type="radio" name="sortType" value="대전광역시" id="deajeon">
 		<label for="deajeon">대전광역시</label>
