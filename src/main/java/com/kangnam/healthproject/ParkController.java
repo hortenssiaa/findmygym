@@ -28,11 +28,9 @@ public class ParkController {
 	@RequestMapping(value ="/park/city", method = RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ArrayList<String> getTown(String cityname) {
-//		System.out.println("Hello here's ParkController getTown()");
 		ArrayList<String> list; 
 		
 		list = parkdao.searchTown(cityname);
-//		System.out.println(list.get(0));
 		
 		return list;
 	}
@@ -40,17 +38,11 @@ public class ParkController {
 	@RequestMapping(value ="/park/parkinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<ParkVO> getParkInfo(String townname) {
-//		System.out.println("Hello here's ParkController getToiletInfo()");
-//		System.out.printf("town:%s\n",townname);
 		
 		ArrayList<ParkVO> list; 
 		
 		list = parkdao.searchDetails(townname);
-//		System.out.println(list.get(0));
-		
-//		for(ToiletVO toilet: list) {
-//			System.out.println(toilet.getPt_name());
-//		}
+
 		return list;
 	}
 }

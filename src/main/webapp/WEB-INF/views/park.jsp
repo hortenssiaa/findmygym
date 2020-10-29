@@ -59,12 +59,6 @@
 							e.stopPropagation();
 							$(this).toggleClass('expanded');
 							$('#'+$(e.target).attr('for')).prop('checked',true);
-							
-							//alert($('#'+$(e.target).attr('for')).val());
-							//alert($('#'+$(e.target).id));
-							
-							//var checkedTown = $(".dropdown-town").children("input:checked").val();
-							//alert("town2:"+town2);
 						}); 
 
 						$(document).click(function() { // 해당 태그 이외의 부분에 click 발생시; expanded 닫아라. 
@@ -94,8 +88,6 @@
 		$("#ajaxbtn").on("click", function() {
 			var city = $(".dropdown-city").children("input:checked").val();
 			var town = $(".dropdown-town").children("input:checked").val();
-			//alert("city:"+city);
-			//alert("town:"+town);
 			
 			if(city != "지역을 선택해주세요" && town != "지역을 선택해주세요") {
 				$.ajax({
@@ -162,8 +154,6 @@
 		});	//on
 		
 		$(".dropdown-city").change(function() {
-			//alert($('#'+$(e.target).attr('for')).val());
-			alert("change1");
 			
 			var city = $(".dropdown-city").children("input:checked").val();
 			

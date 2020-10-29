@@ -193,7 +193,6 @@
 		
 		$(".dropdown-city").change(function() {
 			//alert($('#'+$(e.target).attr('for')).val());
-			alert("change1");
 			
 			var city = $(".dropdown-city").children("input:checked").val();
 			
