@@ -117,10 +117,10 @@
 
 							table = "<tr id=" + i +"> <td class='name'>" + details[i].wo_name 
 							+ "</td><td class='address'>" + details[i].wo_addr
-							+ "</td><td class='kind'>" + details[i].wo_kind 
-							+ "</td><td>" + details[i].wo_admin 
 							+ "</td><td class='lat' hidden='hidden'>" + details[i].wo_lat
-							+ "</td><td class='lng' hidden='hidden'>" + details[i].wo_lng + "</td></tr>";  
+							+ "</td><td class='lng' hidden='hidden'>" + details[i].wo_lng  
+							+ "</td><td class='kind'>" + details[i].wo_kind 
+							+ "</td><td>" + details[i].wo_admin + "</td></tr>";
 							          
 							$("#tab").append(table);
 						}

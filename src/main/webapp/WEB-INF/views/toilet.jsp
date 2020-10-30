@@ -133,12 +133,12 @@
 
 								table = "<tr id=" + i +"> <td class='name'>" + details[i].pt_name 
 								+ "</td><td class='address'>" + details[i].pt_addr2
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng  
 								+ "</td><td>" + details[i].pt_tel 
 								+ "</td><td>" + details[i].pt_time 
 								+ "</td><td>" + details[i].pt_f_handi 
-								+ "</td><td>" + handi_m
-								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
-								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+								+ "</td><td>" + handi_m + "</td></tr>";
 							}
 
 							else if(details[i].pt_addr2 == null) {
@@ -149,23 +149,23 @@
 								
 								table = "<tr id=" + i +"> <td class='name'>" + details[i].pt_name 
 								+ "</td><td class='address'>" + details[i].pt_addr1
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng  
 								+ "</td><td>" + details[i].pt_tel 
 								+ "</td><td>" + details[i].pt_time 
 								+ "</td><td>" + details[i].pt_f_handi 
-								+ "</td><td>" + handi_m
-								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
-								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+								+ "</td><td>" + handi_m + "</td></tr>";
 							}
 							
 							else {
 								table = "<tr id=" + i +"> <td class='name'>" + details[i].pt_name 
 								+ "</td><td class='address'>" + details[i].pt_addr1
+								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
+								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng  
 								+ "</td><td>" + details[i].pt_tel 
 								+ "</td><td>" + details[i].pt_time 
 								+ "</td><td>" + details[i].pt_f_handi 
-								+ "</td><td>" + handi_m
-								+ "</td><td class='lat' hidden='hidden'>" + details[i].pt_lat
-								+ "</td><td class='lng' hidden='hidden'>" + details[i].pt_lng + "</td></tr>";  
+								+ "</td><td>" + handi_m + "</td></tr>";
 							}
 							          
 							$("#tab").append(table);

@@ -122,12 +122,12 @@
 
 							table = "<tr id=" + i +"> <td class='name'>" + details[i].r_name 
 							+ "</td><td class='address'>" + details[i].r_addr
+							+ "</td><td class='lat' hidden='hidden'>" + details[i].r_lat
+							+ "</td><td class='lng' hidden='hidden'>" + details[i].r_lng
 							+ "</td><td class='tel'>" + details[i].r_tel
 							+ "</td><td>" + details[i].r_park
 							+ "</td><td>" + details[i].r_baby
-							+ "</td><td>" + details[i].r_pet 
-							+ "</td><td class='lat' hidden='hidden'>" + details[i].r_lat
-							+ "</td><td class='lng' hidden='hidden'>" + details[i].r_lng + "</td></tr>";  
+							+ "</td><td>" + details[i].r_pet  + "</td></tr>";  
 							          
 							$("#tab").append(table);
 						}

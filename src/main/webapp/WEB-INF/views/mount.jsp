@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공원 정보</title>
+<title>산 정보</title>
 <link rel="stylesheet" href="./resources/css/toilet.css" type="text/css">
 <style type="text/css">
-	#park { /* 페이지 별로 변경! */
+	#mount { /* 페이지 별로 변경! */
 		background-color: #56BCB7;
 	}
 	
@@ -16,7 +16,12 @@
 	}
 	
 	.address {
-		width: 20%;
+		width: 30%;
+	}
+	
+	.customoverlay a {
+		background: #00E72A; 
+		background: #00E72A url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
 	}
 </style>
 <script src="/healthproject/resources/jquery-3.2.1.min.js"></script>
@@ -35,7 +40,7 @@
 			
 			if(city != "지역을 선택해주세요") {
 				$.ajax({
-					url : '/healthproject/park/city',
+					url : '/healthproject/mount/city',
 					data : {"cityname": $(".dropdown-city input:checked").val()},
 					type: 'post',
 					
@@ -91,7 +96,7 @@
 			
 			if(city != "지역을 선택해주세요" && town != "지역을 선택해주세요") {
 				$.ajax({
-					url : '/healthproject/park/parkinfo',
+					url : '/healthproject/mount/mountinfo',
 					data : {'townname': $(".dropdown-town input:checked").val()},
 					type: 'post',
 					
@@ -102,34 +107,33 @@
 						for(var i=0; i<details.length; i++) {
 							var table;
 							
-							if(details[i].pk_addr == null)
-								details[i].pk_addr = "X";
-							
-							if(details[i].pk_tel == null)
-								details[i].pk_tel = "X";
+							if(details[i].mt_addr == null)
+								details[i].mt_addr = "";
 
-							if(details[i].etc1 == null)
-								details[i].etc1 = "";
-							
-							if(details[i].etc2 == null)
-								details[i].etc2 = "";
-							
-							if(details[i].etc3 == null)
-								details[i].etc3 = "";
-							
-							if(details[i].etc4 == null)
-								details[i].etc4 = "";
-							
-							table = "<tr id=" + i +"> <td class='name'>" + details[i].pk_name 
-							+ "</td><td class='address'>" + details[i].pk_addr
-							+ "</td><td class='lat' hidden='hidden'>" + details[i].pk_lat
-							+ "</td><td class='lng' hidden='hidden'>" + details[i].pk_lng
-							+ "</td><td>" + details[i].pk_tel 
-							+ "</td><td>" + details[i].etc1 
-							+ "</td><td>" + details[i].etc2 
-							+ "</td><td>" + details[i].etc3 
-							+ "</td><td>" + details[i].etc4  + "</td></tr>";  
-							
+							if(details[i].mt_tel == null)
+								details[i].mt_tel = "";
+
+							if(details[i].mt_park == null)
+								details[i].mt_park = "";
+
+							if(details[i].mt_baby == null)
+								details[i].mt_baby = "";
+
+							if(details[i].mt_baby.includes("불가"))
+								details[i].mt_baby = "없음";
+
+							if(details[i].mt_pet == null)
+								details[i].mt_pet = "";
+
+							table = "<tr id=" + i +"> <td class='name'>" + details[i].mt_name 
+							+ "</td><td class='address'>" + details[i].mt_addr
+							+ "</td><td class='tel'>" + details[i].mt_tel
+							+ "</td><td>" + details[i].mt_park
+							+ "</td><td>" + details[i].mt_baby
+							+ "</td><td>" + details[i].mt_pet 
+							+ "</td><td class='lat' hidden='hidden'>" + details[i].mt_lat
+							+ "</td><td class='lng' hidden='hidden'>" + details[i].mt_lng + "</td></tr>";  
+							          
 							$("#tab").append(table);
 						}
 						
@@ -162,7 +166,7 @@
 			if(city != "지역을 선택해주세요") {
 				
 				$.ajax({
-					url : '/healthproject/park/city',
+					url : '/healthproject/mount/city',
 					data : {"cityname": $(".dropdown-city input:checked").val()},
 					type: 'post',
 					
@@ -197,7 +201,8 @@
 <body>
 	<jsp:include page="onetouch.jsp"/>
 	
-	공원명, 주소를 클릭하면 지도가 보입니다.
+	산 명
+	, 주소를 클릭하면 지도가 보입니다.
 	
 	<span class="dropdown-city"> 
 		<input type="radio" name="sortType" value="지역을 선택해주세요" checked="checked" id="sort_city">
@@ -217,15 +222,12 @@
 		
 		<input type="radio" name="sortType" value="광주광역시" id="gwangju">
 		<label for="gwangju">광주광역시</label>
-		
+
 		<input type="radio" name="sortType" value="울산광역시" id="ulsan">
 		<label for="ulsan">울산광역시</label>
 		
 		<input type="radio" name="sortType" value="대전광역시" id="deajeon">
 		<label for="deajeon">대전광역시</label>
-		
-		<input type="radio" name="sortType" value="세종특별자치시" id="sejong">
-		<label for="sejong">세종특별자치시</label>
 		
 		<input type="radio" name="sortType" value="경기도" id="gyunggi">
 		<label for="gyunggi">경기도</label>
@@ -273,13 +275,12 @@
 		<table>
 			<thead>
 				<tr>
-					<th class='name'>공원명</th>
+					<th class='name'>산 명</th>
 					<th class='address'>주소</th>
-					<th>전화번호</th>
-					<th>시설1</th>
-					<th>시설2</th>
-					<th>시설3</th>
-					<th>시설4</th>
+					<th class='tel'>문의 및 안내</th>
+					<th>주차가능유무</th>
+					<th>유모차대여유무</th>
+					<th>애완동물 동반가능유무</th>
 					<th id='lat' hidden='hidden'></th>
 					<th id='lng' hidden='hidden'></th>
 				</tr>
@@ -290,6 +291,6 @@
 		</table>
 	</div>
 	
-	<jsp:include page="maps.jsp"/>
+	<jsp:include page="maps_wgs84.jsp"/>
 </body>
 </html>
