@@ -38,11 +38,9 @@ public class ParkController {
 	@RequestMapping(value ="/park/parkinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<ParkVO> getParkInfo(String townname) {
-		
 		ArrayList<ParkVO> list; 
 		
 		list = parkdao.searchDetails(townname);
-
 		return list;
 	}
 }

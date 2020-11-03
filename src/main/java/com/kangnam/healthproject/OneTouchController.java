@@ -14,5 +14,14 @@ public class OneTouchController {
 	public String getOneTouch() {
 		return "/onetouch";
 	}
+
+	@RequestMapping(value = "/categorylist", method = RequestMethod.GET)
+	public String getOCategoryList() {
+		return "/map_category";
+	}
+//	@RequestMapping(value = "/categorylist", method = RequestMethod.GET)
+//	public String getOCategoryList() {
+//		return "/map_category";
+//	}
 	
 }
