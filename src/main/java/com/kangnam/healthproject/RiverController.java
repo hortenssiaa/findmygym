@@ -38,7 +38,7 @@ public class RiverController {
 	@RequestMapping(value ="/river/riverinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<RiverVO> getRiverInfo(String townname) {
-		System.out.println(townname);
+		//System.out.println(townname);
 		ArrayList<RiverVO> list; 
 		
 		list = riverdao.searchDetails(townname);
