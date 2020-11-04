@@ -45,4 +45,15 @@ public class RiverController {
 		
 		return list;
 	}
+
+	@RequestMapping(value ="/river/riverinfobc", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<RiverVO> getRiverInfoByCity(String cityname) {
+		//System.out.println(townname);
+		ArrayList<RiverVO> list; 
+		
+		list = riverdao.searchDetails_ByCity(cityname);
+		
+		return list;
+	}
 }
