@@ -38,7 +38,7 @@ public class RiverController {
 	@RequestMapping(value ="/river/riverinfo", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<RiverVO> getRiverInfo(String townname) {
-		//System.out.println(townname);
+		System.out.println("riverinfo townname:" + townname);
 		ArrayList<RiverVO> list; 
 		
 		list = riverdao.searchDetails(townname);
@@ -49,7 +49,7 @@ public class RiverController {
 	@RequestMapping(value ="/river/riverinfobc", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<RiverVO> getRiverInfoByCity(String cityname) {
-		//System.out.println(townname);
+		System.out.println("riverinfobc townname:" + cityname);
 		ArrayList<RiverVO> list; 
 		
 		list = riverdao.searchDetails_ByCity(cityname);

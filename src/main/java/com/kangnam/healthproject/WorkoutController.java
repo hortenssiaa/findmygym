@@ -30,6 +30,7 @@ public class WorkoutController {
 	public ArrayList<String> getTown(String cityname) {
 		ArrayList<String> list; 
 		
+		System.out.println("workout city cityname:" + cityname);
 		list = workoutdao.searchTown(cityname);
 		
 		return list;
@@ -43,6 +44,18 @@ public class WorkoutController {
 		
 		list = workoutdao.searchDetails(townname);
 
+		return list;
+	}
+
+	@RequestMapping(value ="/workout/workoutinfobc", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<WorkoutVO> getWorkoutInfoByCity(String cityname) {
+
+		System.out.println("workoutinfobc cityname:" + cityname);
+		ArrayList<WorkoutVO> list; 
+		
+		list = workoutdao.searchDetails_ByCity(cityname);
+		
 		return list;
 	}
 }
